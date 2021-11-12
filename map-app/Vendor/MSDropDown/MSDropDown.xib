@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MSDropDown" customModule="MS_FormControls">
+            <connections>
+                <outlet property="icoDDL" destination="4Ap-tV-NjT" id="2By-Hw-flv"/>
+                <outlet property="lblTitle" destination="Hgm-7D-fkw" id="yLI-Oe-wDN"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="856" height="187"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_droplist" translatesAutoresizingMaskIntoConstraints="NO" id="4Ap-tV-NjT">
+                    <rect key="frame" x="674" y="5" width="177" height="177"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="4Ap-tV-NjT" secondAttribute="height" multiplier="1:1" id="rJr-Km-mrP"/>
+                    </constraints>
+                </imageView>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="Hgm-7D-fkw">
+                    <rect key="frame" x="15" y="3" width="656" height="181"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aDt-iI-IPb">
+                    <rect key="frame" x="0.0" y="0.0" width="856" height="187"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <action selector="ddlPressed:" destination="-1" eventType="touchUpInside" id="9UF-QL-GK7"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="4Ap-tV-NjT" secondAttribute="bottom" constant="5" id="5DO-tk-HOR"/>
+                <constraint firstItem="aDt-iI-IPb" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="61y-GQ-kem"/>
+                <constraint firstItem="4Ap-tV-NjT" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="FSf-9G-jIt"/>
+                <constraint firstItem="Hgm-7D-fkw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="Gz9-gh-Pgz"/>
+                <constraint firstAttribute="trailing" secondItem="4Ap-tV-NjT" secondAttribute="trailing" constant="5" id="Hp0-GV-j5L"/>
+                <constraint firstItem="aDt-iI-IPb" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="cW3-pN-VeN"/>
+                <constraint firstItem="aDt-iI-IPb" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="eOb-dk-UcK"/>
+                <constraint firstAttribute="bottom" secondItem="Hgm-7D-fkw" secondAttribute="bottom" constant="3" id="evd-KZ-xq1"/>
+                <constraint firstItem="4Ap-tV-NjT" firstAttribute="leading" secondItem="Hgm-7D-fkw" secondAttribute="trailing" constant="3" id="hxB-tW-bBE"/>
+                <constraint firstItem="aDt-iI-IPb" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="o1C-5R-6PQ"/>
+                <constraint firstItem="Hgm-7D-fkw" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="3" id="t9X-IA-j4U"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-22.399999999999999" y="-150.67466266866569"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_droplist" width="51" height="53"/>
+    </resources>
+</document>

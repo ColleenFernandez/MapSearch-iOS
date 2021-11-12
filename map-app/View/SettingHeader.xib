@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Montserrat-Regular.ttf">
+            <string>Montserrat-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SettingHeader" customModule="SNKRAPP" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="459" height="48"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yd2-g1-23g">
+                    <rect key="frame" x="0.0" y="0.0" width="459" height="48"/>
+                    <color key="backgroundColor" systemColor="systemGray5Color"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Official Account Recommendations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M9d-DJ-739">
+                    <rect key="frame" x="20" y="17" width="189.5" height="14"/>
+                    <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
+                    <color key="textColor" systemColor="systemGray2Color"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Dc-4G-bAP">
+                    <rect key="frame" x="0.0" y="0.0" width="459" height="1"/>
+                    <color key="backgroundColor" systemColor="systemGray2Color"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="chz-ma-49h"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dST-Gr-3RQ">
+                    <rect key="frame" x="0.0" y="47" width="459" height="1"/>
+                    <color key="backgroundColor" systemColor="systemGray2Color"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="u2y-H1-XAr"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemGray4Color"/>
+            <constraints>
+                <constraint firstItem="4Dc-4G-bAP" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="2tj-3X-vfJ"/>
+                <constraint firstItem="dST-Gr-3RQ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="9Ie-8G-TIR"/>
+                <constraint firstItem="Yd2-g1-23g" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="En2-Hl-7h3"/>
+                <constraint firstAttribute="bottom" secondItem="dST-Gr-3RQ" secondAttribute="bottom" id="Fco-fZ-IJV"/>
+                <constraint firstAttribute="trailing" secondItem="dST-Gr-3RQ" secondAttribute="trailing" id="Frs-Ru-Q9L"/>
+                <constraint firstAttribute="bottom" secondItem="Yd2-g1-23g" secondAttribute="bottom" id="f7R-PQ-8CA"/>
+                <constraint firstItem="4Dc-4G-bAP" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gVM-Dc-eOJ"/>
+                <constraint firstAttribute="trailing" secondItem="Yd2-g1-23g" secondAttribute="trailing" id="mTD-Vn-SMa"/>
+                <constraint firstItem="Yd2-g1-23g" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="nTr-Ad-WLb"/>
+                <constraint firstAttribute="trailing" secondItem="4Dc-4G-bAP" secondAttribute="trailing" id="rnk-4K-aVh"/>
+                <constraint firstItem="M9d-DJ-739" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="uKG-FC-dOE"/>
+                <constraint firstItem="M9d-DJ-739" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="zcy-2y-Ul4"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="headerTitle" destination="M9d-DJ-739" id="vz4-Do-Pvc"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="61"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
