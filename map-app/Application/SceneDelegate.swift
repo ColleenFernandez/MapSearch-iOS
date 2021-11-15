@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseMessaging
+import UserNotifications
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -13,10 +16,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        if let windowScene = scene as? UIWindowScene {
+            self.window = UIWindow(windowScene: windowScene)
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC")
+            self.window?.rootViewController = initialViewController
+            self.window!.makeKeyAndVisible()
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -27,8 +34,55 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        registerForPushNotifications()
+        // update pushnotification setting
+        guard let _ = (scene as? UIWindowScene) else { return }
+        if let windowScene = scene as? UIWindowScene {
+            self.window = UIWindow(windowScene: windowScene)
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC")
+            self.window?.rootViewController = initialViewController
+            self.window!.makeKeyAndVisible()
+        }
+    }
+    
+    func registerForPushNotifications() {
+        if #available(iOS 10.0, *) {
+            let authOptions: UNAuthorizationOptions = [.alert, .sound, .badge] // [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { granted, _ in
+                if granted {
+                    print("Permission granted: \(granted)")
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+            })
+            Messaging.messaging().delegate = self
+            // Messaging.messaging().shouldEstablishDirectChannel = true
+        } else {
+            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .sound], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+        }
+    }
+    
+    func getRegisteredPushNotifications() {
+        UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { settings in
+            switch settings.authorizationStatus {
+            case .authorized, .provisional:
+                print("The user agrees to receive notifications.")
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            case .denied:
+                print("Permission denied.")
+            // The user has not given permission. Maybe you can display a message remembering why permission is required.
+            case .notDetermined:
+                print("The permission has not been determined, you can ask the user.")
+                self.getRegisteredPushNotifications()
+            default:
+                return
+            }
+        })
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -46,7 +100,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+}
 
-
+extension SceneDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        Messaging.messaging().subscribe(toTopic: "all")
+        if let fcmToken = fcmToken {
+            print("####################### new scene delegate token registered #######################")
+            UserDefault.setString(key: PARAMS.TOKEN, value: fcmToken)
+            UserDefault.Sync()
+        }
+    }
 }
 

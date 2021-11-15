@@ -18,13 +18,14 @@ class LocationDetailVC: BaseVC {
     @IBOutlet var lbl_location_lat: UILabel!
     @IBOutlet var lbl_location_lang: UILabel!
     @IBOutlet var lbl_location_detail: UILabel!
+    @IBOutlet weak var lbl_location_memo: UILabel!
     @IBOutlet var scr_container: UIScrollView!
     @IBOutlet var btn_favorite: UIButton!
     @IBOutlet var tbl_home: UITableView!
     @IBOutlet var cons_tbl_post: NSLayoutConstraint!
     @IBOutlet var cons_h_imv_location: NSLayoutConstraint!
     @IBOutlet weak var indc_imv_location: UIActivityIndicatorView!
-    
+    var is_last_post: Bool = false
     var location: LocationModel?
     var ds_post = [PostModel]()
     let cellSpacingHeight: CGFloat = 25
@@ -59,6 +60,7 @@ class LocationDetailVC: BaseVC {
             lbl_location_lat.text = "\(one.location_lat ?? 0)"
             lbl_location_lang.text = "\(one.location_lang ?? 0)"
             lbl_location_detail.text = one.location_description
+            lbl_location_memo.text = one.location_memo
             btn_favorite.setImage(one.is_location_like ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.red) : UIImage(systemName: "heart")?.withRenderingMode(.alwaysTemplate).withTintColor(.white), for: .normal)
             btn_favorite.tintColor = one.is_location_like ? .red : .white
             ds_post.removeAll()
@@ -66,6 +68,13 @@ class LocationDetailVC: BaseVC {
                 if posts.count > 0 {
                     ds_post = posts
                     tbl_home.reloadData()
+                    if is_last_post{
+                        DispatchQueue.main.async {
+                            let bottomOffset = CGPoint(x: 0, y: self.scr_container.contentSize.height - self.scr_container.bounds.size.height)
+                            self.scr_container.setContentOffset(bottomOffset, animated: true)
+                            self.tbl_home.scrollToBottomRow()
+                        }
+                    }
                 } else {
                     cons_tbl_post.constant = 0
                 }
@@ -75,33 +84,49 @@ class LocationDetailVC: BaseVC {
         }
     }
     
-    func manageNotes(_ action: NoteActionType, notes: String, post: PostModel){
+    func manageNotes(_ action: NoteActionType, memo: String, location: LocationModel){
         self.showLoadingView(vc: self)
-        ApiManager.manageComment(post_id: post.post_id, comment_content: notes, request_type: action) { success, response in
+        ApiManager.manageMemo(location_id: location.location_id, memo: memo, request_type: action) { success, response in
             self.hideLoadingView()
-            post.notes = notes
+            self.lbl_location_memo.text = memo
+            location.location_memo = memo
         }
     }
-
+    
+    @IBAction func memoBtnClicked(_ sender: Any) {
+        if thisuser.isValid{
+            let dialogViewController = NoteDialogUV(nibName: "NoteDialogUV", bundle: nil)
+            dialogViewController.delegate = self
+            dialogViewController.location = self.location
+            self.presentDialogViewController(dialogViewController, animationPattern: .fadeInOut)
+        }else{
+            self.requireLogin()
+        }
+    }
+    
     @IBAction func favoriteBtnClicked(_ sender: Any) {
-        if let one = location {
-            if one.is_location_like {
-                ApiManager.manageLocationLike(location_id: one.location_id, request_type: .unlike) { success, _ in
-                    if success {
-                        one.is_location_like = false
-                        self.btn_favorite.setImage(one.is_location_like ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.red) : UIImage(systemName: "heart")?.withRenderingMode(.alwaysTemplate).withTintColor(.white), for: .normal)
-                        self.btn_favorite.tintColor = one.is_location_like ? .red : .white
+        if thisuser.isValid{
+            if let one = location {
+                if one.is_location_like {
+                    ApiManager.manageLocationLike(location_id: one.location_id, request_type: .unlike) { success, _ in
+                        if success {
+                            one.is_location_like = false
+                            self.btn_favorite.setImage(one.is_location_like ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.red) : UIImage(systemName: "heart")?.withRenderingMode(.alwaysTemplate).withTintColor(.white), for: .normal)
+                            self.btn_favorite.tintColor = one.is_location_like ? .red : .white
+                        }
                     }
-                }
-            } else {
-                ApiManager.manageLocationLike(location_id: one.location_id, request_type: .like) { success, _ in
-                    if success {
-                        one.is_location_like = true
-                        self.btn_favorite.setImage(one.is_location_like ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.red) : UIImage(systemName: "heart")?.withRenderingMode(.alwaysTemplate).withTintColor(.white), for: .normal)
-                        self.btn_favorite.tintColor = one.is_location_like ? .red : .white
+                } else {
+                    ApiManager.manageLocationLike(location_id: one.location_id, request_type: .like) { success, _ in
+                        if success {
+                            one.is_location_like = true
+                            self.btn_favorite.setImage(one.is_location_like ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.red) : UIImage(systemName: "heart")?.withRenderingMode(.alwaysTemplate).withTintColor(.white), for: .normal)
+                            self.btn_favorite.tintColor = one.is_location_like ? .red : .white
+                        }
                     }
                 }
             }
+        }else{
+            self.requireLogin()
         }
     }
     
@@ -123,10 +148,7 @@ extension LocationDetailVC: UITableViewDataSource, UITableViewDelegate {
         let cell = tbl_home.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
         cell.setDataSource(ds_post[indexPath.section])
         cell.noteAction = {() in
-            let dialogViewController = NoteDialogUV(nibName: "NoteDialogUV", bundle: nil)
-            dialogViewController.delegate = self
-            dialogViewController.post = self.ds_post[indexPath.section]
-            self.presentDialogViewController(dialogViewController, animationPattern: .fadeInOut)
+            
         }
         return cell
     }
@@ -140,5 +162,44 @@ extension LocationDetailVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 10
+    }
+}
+
+extension UITableView {
+    func scrollToBottomRow() {
+        DispatchQueue.main.async {
+            guard self.numberOfSections > 0 else { return }
+
+            // Make an attempt to use the bottom-most section with at least one row
+            var section = max(self.numberOfSections - 1, 0)
+            var row = max(self.numberOfRows(inSection: section) - 1, 0)
+            var indexPath = IndexPath(row: row, section: section)
+
+            // Ensure the index path is valid, otherwise use the section above (sections can
+            // contain 0 rows which leads to an invalid index path)
+            while !self.indexPathIsValid(indexPath) {
+                section = max(section - 1, 0)
+                row = max(self.numberOfRows(inSection: section) - 1, 0)
+                indexPath = IndexPath(row: row, section: section)
+
+                // If we're down to the last section, attempt to use the first row
+                if indexPath.section == 0 {
+                    indexPath = IndexPath(row: 0, section: 0)
+                    break
+                }
+            }
+
+            // In the case that [0, 0] is valid (perhaps no data source?), ensure we don't encounter an
+            // exception here
+            guard self.indexPathIsValid(indexPath) else { return }
+
+            self.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+    }
+
+    func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
+        let section = indexPath.section
+        let row = indexPath.row
+        return section < self.numberOfSections && row < self.numberOfRows(inSection: section)
     }
 }

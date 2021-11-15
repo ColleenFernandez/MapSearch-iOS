@@ -21,13 +21,21 @@ class InfoWindow: UIView {
     @IBOutlet weak var btn_favorite: UIButton!
     
     @IBOutlet weak var lbl_recenttitle: UILabel!
+    @IBOutlet weak var uiv_direction: UIView!
+    @IBOutlet weak var btn_measure: UIButton!
     
     var didTappedCancel : (() -> Void)? = nil
     var didTappedShowDetail : (() -> Void)? = nil
     var didTappedFavorite : (() -> Void)? = nil
+    var didTappedShowRecent: (() -> Void)? = nil
+    var loginAction: (() -> Void)? = nil
+    var didTappedFinish: (() -> Void)? = nil
+    var didTappedMeasure: (() -> Void)? = nil
     let cellSpacingHeight: CGFloat = 0
     
+    @IBOutlet weak var lbl_post_time: UILabel!
     @IBOutlet weak var cons_h_scr: NSLayoutConstraint!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -51,20 +59,21 @@ class InfoWindow: UIView {
         btn_favorite.setImage(location.is_location_like ? UIImage.init(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.red) : UIImage.init(systemName: "heart")?.withRenderingMode(.alwaysTemplate).withTintColor(.white), for: .normal)
         btn_favorite.tintColor = location.is_location_like ? .red : .white
         
-        
         if let post = location.post{
             if post.count == 0{
                 self.lbl_recenttitle.text = nil
                 self.cons_h_scr.constant = 0
             }else{
-                for one in post{
-                    self.lbl_recenttitle.text! += "\(one.post_title ?? "")\n"
+                if let one = post.last{
+                    self.lbl_recenttitle.text! = "\(one.post_title ?? "")"
+                    self.lbl_post_time.text = getStrDate(one.post_time ?? "")
                 }
             }
         }else{
             self.lbl_recenttitle.text = nil
             self.cons_h_scr.constant = 0
         }
+        uiv_direction.isHidden = true
     }
     
     @IBAction func tappedCancel(_ sender: Any) {
@@ -75,10 +84,26 @@ class InfoWindow: UIView {
         didTappedShowDetail?()
     }
     
+    @IBAction func tapRecentPost(_ sender: Any) {
+        didTappedShowRecent?()
+    }
+    
+    @IBAction func measureBtnClicked(_ sender: Any) {
+        didTappedMeasure?()
+    }
+    
+    @IBAction func finishBtnClicked(_ sender: Any) {
+        didTappedFinish?()
+    }
+    
     @IBAction func tapFavorite(_ sender: Any) {
-        didTappedFavorite?()
-        if let mapvc = gMapVC as? MapVC{
-            mapvc.delegate = self
+        if thisuser.isValid{
+            didTappedFavorite?()
+            if let mapvc = gMapVC as? MapVC{
+                mapvc.delegate = self
+            }
+        }else{
+            loginAction?()
         }
     }
 }

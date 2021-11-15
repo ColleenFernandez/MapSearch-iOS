@@ -16,7 +16,7 @@ class PostModel {
     var post_id : Int!
     var location_id : Int!
     var post_content: String?
-    //var post_time: String?
+    var post_time: String?
     var post_des: String?
     var post_title: String?
     var media_ratio: Float
@@ -25,7 +25,7 @@ class PostModel {
     init() {
         self.post_id = 0
         self.location_id = 0
-        //self.post_time = nil
+        self.post_time = nil
         self.post_content = nil
         self.post_des = nil
         self.post_title = nil
@@ -36,7 +36,7 @@ class PostModel {
     init(_ one: JSON){
         self.post_id = one[PARAMS.POST_ID].intValue
         self.location_id = one[PARAMS.LOCATION_ID].intValue
-        //self.post_time = one[PARAMS.POST_TIME].stringValue
+        self.post_time = one[PARAMS.POST_TIME].stringValue
         self.post_content = one[PARAMS.POST_CONTENT].stringValue
         self.post_title = one["post_title"].stringValue
         self.post_des = one[PARAMS.POST_DES].stringValue

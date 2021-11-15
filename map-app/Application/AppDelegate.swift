@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerUserNotificationSettings(pushNotificationSettings)
         registerForPushNotifications()
         // google map setting
-        GMSServices.provideAPIKey("AIzaSyDigbXIHJ2q5mQnubsKz4dxLek8heVX69c")
+        GMSServices.provideAPIKey(Constants.GOOGLE_API_KEY)
         
         return true
     }

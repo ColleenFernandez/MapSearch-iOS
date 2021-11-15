@@ -27,22 +27,18 @@ class SplashVC: BaseVC {
     }
 
     func checkBackgrouond(){
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
             if thisuser.isValid{
                 self.showLoadingView(vc: self)
                 ApiManager.signin(email: thisuser.user_email ?? "", password: thisuser.password ?? "") { success, response in
                     self.hideLoadingView()
-                    if success{
-                        self.gotoVC("TabBarVC")
-                    }else{
-                        self.gotoVC("LoginNav")
-                    }
+                    self.gotoVC("TabBarVC")
                 }
             }else{
                 self.showLoadingView(vc: self)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.hideLoadingView()
-                    self.gotoVC("LoginNav")
+                    self.gotoVC("TabBarVC")
                 }
             }
         })

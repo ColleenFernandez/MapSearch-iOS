@@ -78,6 +78,8 @@ struct PARAMS {
     static let LOCATION_NAME = "location_name"
     static let LOCATION_IMAGE = "location_image"
     static let IS_LOCACTION_LIKE = "is_location_like"
+    static let HAS_NEW_NOTI = "has_new_noti"
+    static let LOCATION_MEMO = "location_memo"
 }
 
 struct Messages {
@@ -234,6 +236,7 @@ struct Constants {
     static let SCREEN_WIDTH = UIScreen.main.bounds.width
     static let TERMS_LINK = "https://developer.apple.com"
     static let PRIVACY_LINK = "https://developer.google.com"
+    static let GOOGLE_API_KEY = "AIzaSyDigbXIHJ2q5mQnubsKz4dxLek8heVX69c"
 }
 
 struct COLORS {

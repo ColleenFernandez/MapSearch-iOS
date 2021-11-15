@@ -20,10 +20,12 @@ class LocationModel {
     var location_lang: Double?
     var mark: MarkModel?
     var location_description: String?
+    var location_memo: String?
     var location_name: String?
     var location_image: String?
     var is_location_like: Bool = false
     var post: [PostModel]?
+    var has_new_noti: Bool = false
     
     init() {
         self.location_id = -1
@@ -36,6 +38,8 @@ class LocationModel {
         self.location_image = nil
         self.is_location_like = false
         self.post = nil
+        self.has_new_noti = false
+        self.location_memo = nil
     }
     
     init(_ one: JSON){
@@ -45,6 +49,7 @@ class LocationModel {
         self.location_lang = one[PARAMS.LOCATION_LANG].doubleValue
         self.mark = MarkModel(one)
         self.location_description = one[PARAMS.LOCATION_DESCRIPTION].stringValue
+        self.location_memo = JSON(one["memo"].object)["memo"].stringValue
         self.location_name = one[PARAMS.LOCATION_NAME].stringValue
         self.location_image = one[PARAMS.LOCATION_IMAGE].stringValue
         self.is_location_like = one[PARAMS.IS_LOCACTION_LIKE].intValue == 1 ? true : false
@@ -57,6 +62,7 @@ class LocationModel {
                 }
             }
         }
+        self.has_new_noti = one[PARAMS.HAS_NEW_NOTI].intValue == 1 ? true : false
     }
 }
 

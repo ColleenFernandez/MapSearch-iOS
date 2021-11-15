@@ -75,6 +75,8 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
             case 0:
                 if thisuser.isValid{
                     self.gotoNavPresent("MyaccountVC", fullscreen: true)
+                }else{
+                    self.requireLogin()
                 }
             default:
                 print("default")
@@ -96,7 +98,7 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
                         thisuser.clearUserInfo()
                         self.gotoVC("LoginNav")
                     }
-                    let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { (_: UIAlertAction!) in
+                    let cancelAction = UIAlertAction(title: "いいえ", style: .default) { (_: UIAlertAction!) in
                     }
                     alertController.addAction(OKAction)
                     alertController.addAction(cancelAction)

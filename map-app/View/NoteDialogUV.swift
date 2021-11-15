@@ -12,7 +12,7 @@ class NoteDialogUV: BaseVC {
     
     @IBOutlet weak var txv_note: UITextView!
     @IBOutlet weak var btn_upload: UIButton!
-    var post: PostModel?
+    var location: LocationModel?
     var delegate: LocationDetailVC?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -24,8 +24,8 @@ class NoteDialogUV: BaseVC {
         // adjust height and width of dialog
         // view.bounds.size.height = UIScreen.main.bounds.size.height * 0.7
         view.bounds.size.width = UIScreen.main.bounds.size.width * 0.95
-        if let post = self.post{
-            if let old_note = post.notes, !old_note.isEmpty{
+        if let location = self.location{
+            if let old_note = location.location_memo, !old_note.isEmpty{
                 self.txv_note.text = old_note
                 self.btn_upload.setTitle("更新", for: .normal)
             }else{
@@ -36,11 +36,11 @@ class NoteDialogUV: BaseVC {
 
     // close dialogView
     @IBAction func uploadUpdateBtnClicked(_ sender: AnyObject) {
-        if let post = self.post{
-            if let old_note = post.notes,!old_note.isEmpty {
-                delegate?.manageNotes(.update, notes: self.txv_note.text, post: post)
+        if let location = self.location{
+            if let old_note = location.location_memo,!old_note.isEmpty {
+                delegate?.manageNotes(.update, memo: self.txv_note.text,location: location)
             }else{
-                delegate?.manageNotes(.upload, notes: self.txv_note.text, post: post)
+                delegate?.manageNotes(.upload, memo: self.txv_note.text,location: location)
             }
         }
         self.delegate?.dismissDialog()

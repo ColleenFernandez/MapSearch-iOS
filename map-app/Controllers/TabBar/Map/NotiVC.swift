@@ -66,9 +66,9 @@ class NotiVC: BaseVC {
                     if num == array.count{
                         ApiManager.setNotiRead { (isSuccess, data) in
                             if isSuccess{
+                                UIApplication.shared.applicationIconBadgeNumber = 0
+                                self.badgePath.updateChildValues(["badge":0])
                                 if self.ds_noti.count > 0{
-                                    UIApplication.shared.applicationIconBadgeNumber = 0
-                                    self.badgePath.updateChildValues(["badge":0])
                                 }else{
                                     self.showToast("通知はありません")
                                 }

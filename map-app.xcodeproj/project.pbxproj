@@ -22,7 +22,6 @@
 		8471F7A1273181A400B39F10 /* LocationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471F7A0273181A400B39F10 /* LocationDetailVC.swift */; };
 		8471F7A32731861E00B39F10 /* PostModel&Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471F7A22731861D00B39F10 /* PostModel&Cell.swift */; };
 		8471F7A527319C8F00B39F10 /* CommonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471F7A427319C8F00B39F10 /* CommonUtils.swift */; };
-		847F4DD8273AAE1900992026 /* CommentModel&Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847F4DD7273AAE1900992026 /* CommentModel&Cell.swift */; };
 		847F4DDC273AB41B00992026 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847F4DDB273AB41B00992026 /* Date+Extension.swift */; };
 		848700CA272B02FA0099D600 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848700C9272B02FA0099D600 /* AppDelegate.swift */; };
 		848700CC272B02FA0099D600 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848700CB272B02FA0099D600 /* SceneDelegate.swift */; };
@@ -78,7 +77,6 @@
 		8471F7A0273181A400B39F10 /* LocationDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDetailVC.swift; sourceTree = "<group>"; };
 		8471F7A22731861D00B39F10 /* PostModel&Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PostModel&Cell.swift"; sourceTree = "<group>"; };
 		8471F7A427319C8F00B39F10 /* CommonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonUtils.swift; sourceTree = "<group>"; };
-		847F4DD7273AAE1900992026 /* CommentModel&Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CommentModel&Cell.swift"; sourceTree = "<group>"; };
 		847F4DDB273AB41B00992026 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		848700C6272B02FA0099D600 /* map-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "map-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		848700C9272B02FA0099D600 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -282,7 +280,6 @@
 		848700F9272B1A790099D600 /* Model&Cell */ = {
 			isa = PBXGroup;
 			children = (
-				847F4DD7273AAE1900992026 /* CommentModel&Cell.swift */,
 				84DAF4162731ADCE003ABE46 /* NotiModel&Cell.swift */,
 				8471F7A22731861D00B39F10 /* PostModel&Cell.swift */,
 				84B55EDA272E8D870078CA86 /* Location&MarkModel.swift */,
@@ -516,7 +513,6 @@
 				8487011E272B5CD00099D600 /* SplashVC.swift in Sources */,
 				848700F6272B19890099D600 /* UIImage+Extension.swift in Sources */,
 				84184ED527398D9700CD65BD /* SelectorTableViewController.swift in Sources */,
-				847F4DD8273AAE1900992026 /* CommentModel&Cell.swift in Sources */,
 				84DAF4192731B79E003ABE46 /* FirebaseAPI.swift in Sources */,
 				8487010D272B3EEA0099D600 /* UITextField+Extension.swift in Sources */,
 				8487010A272B3E7C0099D600 /* SettingHeader.swift in Sources */,

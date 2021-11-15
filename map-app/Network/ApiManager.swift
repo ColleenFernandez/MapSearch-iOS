@@ -13,8 +13,8 @@ import SwiftyJSON
                             // MAP app project //
 // ************************************************************************//
 
-//let SERVER_URL = "http://192.168.101.105:1119/api/"
-let SERVER_URL = "https://map-app.tutu-sol.com/api/"
+let SERVER_URL = "http://192.168.101.105:1119/api/"
+//let SERVER_URL = "https://map-app.tutu-sol.com/api/"
 let SUCCESSTRUE = 200
 
 class ApiManager {
@@ -311,9 +311,9 @@ class ApiManager {
         }
     }
     
-    class func manageComment(post_id: Int, comment_content: String?, request_type: NoteActionType, completion :  @escaping (_ success: Bool, _ response : Any?) -> ()) {
-        let params = [PARAMS.USER_ID: thisuser.user_id ?? 0, "comment_content": comment_content ?? "", PARAMS.POST_ID: post_id, PARAMS.REQUEST_TYPE: request_type.rawValue] as [String : Any]
-        Alamofire.request(SERVER_URL + "manageComment", method:.post, parameters: params)
+    class func manageMemo(location_id: Int, memo: String?, request_type: NoteActionType, completion :  @escaping (_ success: Bool, _ response : Any?) -> ()) {
+        let params = [PARAMS.USER_ID: thisuser.user_id ?? 0, "memo": memo ?? "", PARAMS.LOCATION_ID: location_id, PARAMS.REQUEST_TYPE: request_type.rawValue] as [String : Any]
+        Alamofire.request(SERVER_URL + "manageMemo", method:.post, parameters: params)
         .responseJSON { response in
             switch response.result {
                 case .failure:

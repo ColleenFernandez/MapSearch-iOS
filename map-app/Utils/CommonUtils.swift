@@ -61,3 +61,13 @@ func getStrDateVariousTimeFormat(_ tstamp: String) -> String {
     strDate = dateFormatter.string(from: date ?? Date())
     return strDate
 }
+
+func getStrDate(_ tstamp: String) -> String {
+    let date: Date? = Date(timeIntervalSince1970: TimeInterval(tstamp)!)
+    var strDate: String = ""
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = NSLocale.current
+    dateFormatter.dateFormat = "yyyy.MM.dd HH:mm a"
+    strDate = dateFormatter.string(from: date ?? Date())
+    return strDate
+}

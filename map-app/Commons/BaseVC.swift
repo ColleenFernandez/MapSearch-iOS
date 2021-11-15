@@ -156,4 +156,17 @@ class BaseVC: UIViewController {
         show(browser, sender: nil)
         browser.loadURLString(link)
     }
+    
+    func requireLogin(){
+        let alertController = UIAlertController(title: "サインインが必要", message: "このアクションを実行するには、サインインする必要があります。", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "いいえ", style: .default) { (_: UIAlertAction!) in
+            
+        }
+        let OKAction = UIAlertAction(title: "はい", style: .default) { (_: UIAlertAction!) in
+            self.gotoVC("LoginNav")
+        }
+        alertController.addAction(OKAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
 }

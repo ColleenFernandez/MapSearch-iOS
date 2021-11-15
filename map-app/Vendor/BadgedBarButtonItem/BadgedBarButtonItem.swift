@@ -1,5 +1,6 @@
 import UIKit
 
+
 public class BadgeBarButtonItem: UIBarButtonItem
 {
     @IBInspectable
@@ -23,6 +24,9 @@ public class BadgeBarButtonItem: UIBarButtonItem
         label.textAlignment = .center
         label.textColor = .white
         label.layer.zPosition = 1
+        label.numberOfLines = 1
+        label.minimumScaleFactor = CGFloat(0.5)
+        label.font = UIFont.systemFont(ofSize: 10)
         self.label = label
         
         super.init(coder: aDecoder)
