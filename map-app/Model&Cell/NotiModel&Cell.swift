@@ -12,20 +12,20 @@ class NotiModel {
     var noti_id: Int!
     var noti_time: String?
     var noti_text: String?
-    var noti_image: String?
+    var location_info: LocationModel?
 
     init(_ json: JSON) {
         self.noti_id = json["noti_id"].intValue
         self.noti_time = json["noti_time"].stringValue
         self.noti_text = json["noti_text"].stringValue
-        self.noti_image = json["noti_image"].stringValue
+        self.location_info = LocationModel(JSON(json["location_info"].object))
     }
 
     init() {
         noti_id = -1
         noti_time = ""
         noti_text = ""
-        noti_image = ""
+        location_info = nil
     }
 }
 
@@ -35,7 +35,7 @@ class NotiCell: UITableViewCell {
     @IBOutlet var lbl_noti_text: UILabel!
 
     func setDataSource(one: NotiModel) {
-        if let url = URL(string: one.noti_image ?? "") {
+        if let url = URL(string: one.location_info?.location_image ?? "") {
             imv_noti.kf.setImage(with: url, placeholder: UIImage(named: "logo"))
         }
         lbl_noti_time.text = getDiffTimestamp(one.noti_time ?? "")

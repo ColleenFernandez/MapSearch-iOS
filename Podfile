@@ -23,4 +23,5 @@ target 'map-app' do
   pod 'ActiveLabel'
   pod 'ActionSheetPicker-3.0'
   pod 'LSDialogViewController', '~> 4.0'
+  pod 'Spring', :git => 'https://github.com/MengTo/Spring.git'
 end

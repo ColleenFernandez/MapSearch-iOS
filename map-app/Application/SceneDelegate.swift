@@ -13,6 +13,7 @@ import UserNotifications
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    private(set) static var shared: SceneDelegate?
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -20,10 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             self.window = UIWindow(windowScene: windowScene)
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC")
+            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashNav")
             self.window?.rootViewController = initialViewController
             self.window!.makeKeyAndVisible()
         }
+        Self.shared = self
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -40,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             self.window = UIWindow(windowScene: windowScene)
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC")
+            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashNav")
             self.window?.rootViewController = initialViewController
             self.window!.makeKeyAndVisible()
         }

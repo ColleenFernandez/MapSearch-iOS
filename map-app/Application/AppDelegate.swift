@@ -11,6 +11,7 @@ import IQKeyboardManagerSwift
 import SwiftMessages
 import UserNotifications
 import GoogleMaps
+import SwiftyJSON
 
 var thisuser: UserModel!
 
@@ -117,12 +118,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
-
+        
         let aps = userInfo["aps"] as? [AnyHashable: Any]
         let badgeCount = aps!["badge"] as? Int ?? 0
         UIApplication.shared.applicationIconBadgeNumber = badgeCount
-
+        
         let alertMessage = aps!["alert"] as? [AnyHashable: Any]
+        
         if let alertMessage = alertMessage {
             let bodyMessage = alertMessage["body"] as? String
             let titleMessage = alertMessage["title"] as? String
@@ -135,8 +137,27 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 let icon = UIImage(named: "ic_logo")!.resize(toTargetSize: CGSize(width: 40, height: 40)).withRoundedCorners(radius: 5)
 
                 view.configureContent(title: titleMessage, body: bodyMessage, iconImage: icon, iconText: nil, buttonImage: nil, buttonTitle: "OK", buttonTapHandler: { _ in
-                    SwiftMessages.hide()
-                    // UIApplication.shared.applicationIconBadgeNumber -= 1
+                    // goto location detail page
+                    if let location_id_hash = userInfo["location_info"] as? AnyHashable{
+                        let json = JSON(location_id_hash)
+                        if let data = json.rawString()!.data(using: .utf8) {
+                            if let json = try? JSON(data: data) {
+                                if let json_arr = json["location_info"].arrayValue.first{
+                                    let json_data = JSON(json_arr)
+                                    let location = LocationModel(json_data)
+                                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                                    let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC") as! SplashVC
+                                    initialViewController.from_noti = true
+                                    initialViewController.location = location
+                                    let navigationcontroller = UINavigationController.init(rootViewController: initialViewController)
+                                    
+                                    SceneDelegate.shared?.window?.rootViewController = navigationcontroller
+                                    SceneDelegate.shared?.window!.makeKeyAndVisible()
+                                    SwiftMessages.hide()
+                                }
+                            }
+                        }
+                    }
                 })
                 view.configureTheme(backgroundColor: .blue, foregroundColor: UIColor.white, iconImage: icon, iconText: nil)
                 view.button?.setTitle("OK", for: .normal)
@@ -159,22 +180,32 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
     // when in background
-    /*func userNotificationCenter(_ center: UNUserNotificationCenter,
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        // display alert for notification
-        let home = UIStoryboard.init(name: "Main", bundle: nil).instantiateInitialViewController()!
-        let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MapVC") as! MapVC
-        vc.test = "123132132"
-
-        vc.modalPresentationStyle = .fullScreen
-        let window = UIApplication.shared.keyWindow
-        window?.rootViewController = home
-        window?.makeKeyAndVisible()
-        home.present(vc, animated: false, completion: nil)
+        if let location_id_hash = userInfo["location_info"] as? AnyHashable{
+            let json = JSON(location_id_hash)
+            if let data = json.rawString()!.data(using: .utf8) {
+                if let json = try? JSON(data: data) {
+                    if let json_arr = json["location_info"].arrayValue.first{
+                        let json_data = JSON(json_arr)
+                        let location = LocationModel(json_data)
+                        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                        let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC") as! SplashVC
+                        initialViewController.from_noti = true
+                        initialViewController.location = location
+                        let navigationcontroller = UINavigationController.init(rootViewController: initialViewController)
+                        
+                        SceneDelegate.shared?.window?.rootViewController = navigationcontroller
+                        SceneDelegate.shared?.window!.makeKeyAndVisible()
+                        SwiftMessages.hide()
+                    }
+                }
+            }
+        }
         completionHandler()
-    }*/
+    }
 }
 
 //
@@ -185,6 +216,35 @@ extension AppDelegate: MessagingDelegate {
             UserDefault.setString(key: PARAMS.TOKEN, value: fcmToken)
             UserDefault.Sync()
         }
+    }
+}
+
+extension UIApplication {
+
+    var visibleViewController: UIViewController? {
+
+        guard let rootViewController = keyWindow?.rootViewController else {
+            return nil
+        }
+
+        return getVisibleViewController(rootViewController)
+    }
+
+    private func getVisibleViewController(_ rootViewController: UIViewController) -> UIViewController? {
+
+        if let presentedViewController = rootViewController.presentedViewController {
+            return getVisibleViewController(presentedViewController)
+        }
+
+        if let navigationController = rootViewController as? UINavigationController {
+            return navigationController.visibleViewController
+        }
+
+        if let tabBarController = rootViewController as? UITabBarController {
+            return tabBarController.selectedViewController
+        }
+
+        return rootViewController
     }
 }
 

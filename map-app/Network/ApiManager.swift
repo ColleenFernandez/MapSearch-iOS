@@ -13,8 +13,8 @@ import SwiftyJSON
                             // MAP app project //
 // ************************************************************************//
 
-let SERVER_URL = "http://192.168.101.105:1119/api/"
-//let SERVER_URL = "https://map-app.tutu-sol.com/api/"
+//let SERVER_URL = "http://192.168.101.105:1119/api/"
+let SERVER_URL = "https://map-app.tutu-sol.com/api/"
 let SUCCESSTRUE = 200
 
 class ApiManager {
@@ -323,6 +323,26 @@ class ApiManager {
                 let status = dict[PARAMS.RESULTCODE].intValue// 0,1,2
                 if status == SUCCESSTRUE {
                     completion(true,dict)
+                } else {
+                    completion(false, status)
+                }
+            }
+        }
+    }
+    
+    class func getNotiLocations(_ location_id: Int, completion: @escaping (_ success: Bool, _ response: Any?) -> Void) {
+        let params = [PARAMS.USER_ID: thisuser.user_id ?? 0, PARAMS.LOCATION_ID: location_id] as [String: Any]
+
+        Alamofire.request(SERVER_URL + "getNotiLocations", method: .post, parameters: params)
+        .responseJSON { response in
+            switch response.result {
+            case .failure:
+                completion(false, nil)
+            case let .success(data):
+                let dict = JSON(data)
+                let status = dict[PARAMS.RESULTCODE].intValue // 0,1,2
+                if status == SUCCESSTRUE {
+                    completion(true, dict)
                 } else {
                     completion(false, status)
                 }

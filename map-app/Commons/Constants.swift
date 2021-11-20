@@ -80,6 +80,7 @@ struct PARAMS {
     static let IS_LOCACTION_LIKE = "is_location_like"
     static let HAS_NEW_NOTI = "has_new_noti"
     static let LOCATION_MEMO = "location_memo"
+    static let LAST_UPDATED = "last_updated"
 }
 
 struct Messages {
@@ -234,9 +235,11 @@ struct Constants {
     static let SAVE_ROOT_PATH = "save_root"
     static let SCREEN_HEIGHT = UIScreen.main.bounds.height
     static let SCREEN_WIDTH = UIScreen.main.bounds.width
-    static let TERMS_LINK = "https://developer.apple.com"
-    static let PRIVACY_LINK = "https://developer.google.com"
+    static let TERMS_LINK = "https://map-app.tutu-sol.com/terms.pdf"
+    static let PRIVACY_LINK = "https://map-app.tutu-sol.com/privacy.pdf"
     static let GOOGLE_API_KEY = "AIzaSyDigbXIHJ2q5mQnubsKz4dxLek8heVX69c"
+    static let DIRECTION_API_KEY = "AIzaSyDs247oW0HsnxfIA86Ar9IQYI1bC4TwnAg"
+    static let ONE_WEEK_TIMESTAMP  = 604800
 }
 
 struct COLORS {

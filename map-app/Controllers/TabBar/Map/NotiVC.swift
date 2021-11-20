@@ -64,7 +64,13 @@ class NotiVC: BaseVC {
                         self.ds_noti.append(NotiModel(JSON(one)))
                     }
                     if num == array.count{
-                        ApiManager.setNotiRead { (isSuccess, data) in
+                        UIApplication.shared.applicationIconBadgeNumber = 0
+                        self.badgePath.updateChildValues(["badge":0])
+                        if self.ds_noti.count > 0{
+                        }else{
+                            self.showToast("通知はありません")
+                        }
+                        /*ApiManager.setNotiRead { (isSuccess, data) in
                             if isSuccess{
                                 UIApplication.shared.applicationIconBadgeNumber = 0
                                 self.badgePath.updateChildValues(["badge":0])
@@ -75,7 +81,7 @@ class NotiVC: BaseVC {
                             }else{
                                 self.showToast(Messages.NETISSUE)
                             }
-                        }
+                        }*/
                         self.tbl_noti.reloadData()
                     }
                 }else{
@@ -120,6 +126,9 @@ extension NotiVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let tovc = self.createVC("LocationDetailVC") as! LocationDetailVC
+        tovc.location = ds_noti[indexPath.section].location_info
+        self.navigationController?.pushViewController(tovc, animated: true)
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

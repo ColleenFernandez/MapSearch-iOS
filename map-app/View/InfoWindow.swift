@@ -23,12 +23,12 @@ class InfoWindow: UIView {
     @IBOutlet weak var lbl_recenttitle: UILabel!
     @IBOutlet weak var uiv_direction: UIView!
     @IBOutlet weak var btn_measure: UIButton!
+    @IBOutlet weak var lbl_distance_info: UILabel!
     
     var didTappedCancel : (() -> Void)? = nil
     var didTappedShowDetail : (() -> Void)? = nil
     var didTappedFavorite : (() -> Void)? = nil
     var didTappedShowRecent: (() -> Void)? = nil
-    var loginAction: (() -> Void)? = nil
     var didTappedFinish: (() -> Void)? = nil
     var didTappedMeasure: (() -> Void)? = nil
     let cellSpacingHeight: CGFloat = 0
@@ -97,13 +97,9 @@ class InfoWindow: UIView {
     }
     
     @IBAction func tapFavorite(_ sender: Any) {
-        if thisuser.isValid{
-            didTappedFavorite?()
-            if let mapvc = gMapVC as? MapVC{
-                mapvc.delegate = self
-            }
-        }else{
-            loginAction?()
+        didTappedFavorite?()
+        if let mapvc = gMapVC as? MapVC{
+            mapvc.delegate = self
         }
     }
 }

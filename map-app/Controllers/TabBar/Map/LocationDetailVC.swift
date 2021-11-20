@@ -29,11 +29,32 @@ class LocationDetailVC: BaseVC {
     var location: LocationModel?
     var ds_post = [PostModel]()
     let cellSpacingHeight: CGFloat = 25
+    var from_noti: Bool = false
     
     override func viewDidLoad() {
         navigationItem.title = "場所の詳細"
         super.viewDidLoad()
-        addBackButton()
+        addCustomBackButton()
+    }
+    
+    func addCustomBackButton() {
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .bold, scale: .large)
+        let btn_back = UIButton(type: .custom)
+        btn_back.setImage(UIImage.init(systemName: "chevron.left")!.withConfiguration(largeConfig).withRenderingMode(.alwaysTemplate).withTintColor(.black), for: .normal)
+        
+        btn_back.addTarget(self, action: #selector(btnCustomActionBackClicked), for: .touchUpInside)
+        btn_back.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        btn_back.tintColor = .black
+        let barButtonItemBack = UIBarButtonItem(customView: btn_back)
+        self.navigationItem.leftBarButtonItem = barButtonItemBack
+    }
+    
+    @objc func btnCustomActionBackClicked() {
+        if from_noti{
+            self.gotoTabControllerWithIndex(0)
+        }else{
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -48,9 +69,9 @@ class LocationDetailVC: BaseVC {
                 DispatchQueue.main.async() { [weak self] in
                     if let image = UIImage(data: data){
                         let ratio = Float(image.size.height) / Float(image.size.width)
-                        self!.indc_imv_location.stopAnimating()
-                        self!.imv_location_image.image = image
-                        self!.cons_h_imv_location.constant = (Constants.SCREEN_WIDTH - 30) * CGFloat(ratio)
+                        self?.indc_imv_location.stopAnimating()
+                        self?.imv_location_image.image = image
+                        self?.cons_h_imv_location.constant = (Constants.SCREEN_WIDTH - 30) * CGFloat(ratio)
                     }
                 }
             }

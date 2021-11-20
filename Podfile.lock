@@ -460,6 +460,7 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (2.0.0)
+  - Spring (1.0.6)
   - SwiftMessages (9.0.4):
     - SwiftMessages/App (= 9.0.4)
   - SwiftMessages/App (9.0.4)
@@ -481,6 +482,7 @@ DEPENDENCIES:
   - Kingfisher (= 4.9.0)
   - LSDialogViewController (~> 4.0)
   - MBProgressHUD
+  - Spring (from `https://github.com/MengTo/Spring.git`)
   - SwiftMessages
   - SwiftyJSON
   - SwiftyUserDefaults
@@ -519,6 +521,15 @@ SPEC REPOS:
     - SwiftyUserDefaults
     - Toast-Swift
 
+EXTERNAL SOURCES:
+  Spring:
+    :git: https://github.com/MengTo/Spring.git
+
+CHECKOUT OPTIONS:
+  Spring:
+    :commit: 50d92a5b9e08848387ae95bf44c6ad20834f7083
+    :git: https://github.com/MengTo/Spring.git
+
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   ActionSheetPicker-3.0: 36da254b97a09ff89679ecb8b8510bd3e5bdc773
@@ -546,11 +557,12 @@ SPEC CHECKSUMS:
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  Spring: 3d113f14575ef79aec9c5f906dfa4f5001c03254
   SwiftMessages: 082ed63613a49fa8e749cd6000bb0a8b9bbc736f
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: d589adacc5955252c14b3ca9d9369a20f7d2967d
+PODFILE CHECKSUM: 661f490dc09aa325dab210e3dd5276a31b8af1d1
 
 COCOAPODS: 1.11.2

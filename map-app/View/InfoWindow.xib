@@ -321,6 +321,7 @@
                 <outlet property="btn_measure" destination="Dt6-yg-ges" id="fQI-iE-kNe"/>
                 <outlet property="cons_h_scr" destination="IEa-Lw-0eR" id="bBN-kc-K9A"/>
                 <outlet property="imv_avatar" destination="kfx-mI-QIY" id="4Jl-xM-McM"/>
+                <outlet property="lbl_distance_info" destination="glW-jJ-Z7f" id="9cj-bO-xcO"/>
                 <outlet property="lbl_email" destination="wYB-z4-Ai6" id="dcH-td-KNK"/>
                 <outlet property="lbl_location" destination="cp6-KM-V9A" id="al2-ck-mHl"/>
                 <outlet property="lbl_post_time" destination="Ava-Ab-Yqz" id="glK-hM-dnb"/>

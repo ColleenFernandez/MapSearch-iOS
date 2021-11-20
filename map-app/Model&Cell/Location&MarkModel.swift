@@ -62,7 +62,7 @@ class LocationModel {
                 }
             }
         }
-        self.has_new_noti = one[PARAMS.HAS_NEW_NOTI].intValue == 1 ? true : false
+        self.has_new_noti = Int64(NSDate().timeIntervalSince1970) - one[PARAMS.LAST_UPDATED].int64Value <= Constants.ONE_WEEK_TIMESTAMP ? true : false
     }
 }
 

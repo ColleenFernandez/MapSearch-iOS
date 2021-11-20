@@ -5,20 +5,24 @@
 //  Created by top Dev on 14.01.2021.
 //
 
+import Alamofire
 import FirebaseDatabase
 import GoogleMaps
 import Kingfisher
 import LSDialogViewController
 import SwiftyJSON
 import UIKit
-import Alamofire
+import Spring
 
 var gMapVC: UIViewController?
 
 class MapVC: BaseVC {
     @IBOutlet var mapView: GMSMapView!
     @IBOutlet var cus_right_badge: BadgeBarButtonItem!
-
+    @IBOutlet var uiv_info: SpringView!
+    @IBOutlet weak var uiv_background: UIView!
+    @IBOutlet var lbl_info: UILabel!
+    
     var zoom: Float = 15
     var tappedMarker: GMSMarker?
 
@@ -26,7 +30,6 @@ class MapVC: BaseVC {
     var marks = [MarkModel]()
     var location_options = [KeyValueModel]()
     var markers = [GMSMarker]()
-    var infoWindow: InfoWindow!
     var myLocation: CLLocation?
     var locationManager = CLLocationManager()
     fileprivate var locationMarker: GMSMarker? = GMSMarker()
@@ -37,17 +40,35 @@ class MapVC: BaseVC {
     var bagdeGetHandle: UInt?
     let badgePath = Database.database().reference().child("badge").child("\(thisuser.user_id ?? 0)")
 
+    // polylines
+    var polylines = [GMSPolyline]()
+    var is_started_measure: Bool = false
+    var selected_location: LocationModel?
+    var location_markers = [GMSMarker]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
         mapView.mapStyle(withFilename: "map_style", andType: "json")
         gMapVC = self
     }
+    
+    func initializeTheLocationManager() {
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        polylines.removeAll()
+        location_markers.removeAll()
         showNavBar()
         setMapMarkers()
+        setInfoUI()
+        //Location Manager code to fetch current location
+        initializeTheLocationManager()
+        self.mapView.isMyLocationEnabled = true
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -55,6 +76,37 @@ class MapVC: BaseVC {
         badgePath.removeAllObservers()
     }
 
+    func setInfoUI() {
+        self.uiv_info.isHidden = true
+        uiv_info.roundCorners([.bottomLeft, .bottomRight], radius: 10)
+    }
+    
+    func showInfo(_ text: String) {
+        self.uiv_info.isHidden = false
+        UIView.animate(withDuration: 0.1, animations: {
+            //self.uiv_background.backgroundColor = UIColor(hex: "69DBFF")
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.5, animations: {
+                //self.uiv_background.backgroundColor = UIColor(hex: "279CEB")
+                self.lbl_info.text = text
+            })
+        })
+        
+        animateView()
+    }
+    
+    func animateView(){
+        uiv_info.force = 1
+        uiv_info.duration = 1
+        uiv_info.delay = 0
+        
+        uiv_info.damping = 0.7
+        uiv_info.velocity = 0.7
+        uiv_info.animation = Spring.AnimationPreset.FadeInDown.rawValue
+        uiv_info.curve = Spring.AnimationCurve.EaseIn.rawValue
+        uiv_info.animate()
+    }
+    
     func setUI() {
         navigationItem.title = Messages.MAP
         mapView.delegate = self
@@ -327,6 +379,19 @@ class MapVC: BaseVC {
     @IBAction func filterBtnClicked(_ sender: Any) {
         showDialog(.fadeInOut)
     }
+    
+    @IBAction func dismissBtnClicked(_ sender: Any) {
+        self.uiv_info.force = 1
+        self.uiv_info.duration = 1
+        self.uiv_info.delay = 0
+        self.uiv_info.damping = 0.7
+        self.uiv_info.velocity = 0.7
+        self.uiv_info.animation = Spring.AnimationPreset.FadeOut.rawValue
+        self.uiv_info.curve = Spring.AnimationCurve.EaseOut.rawValue
+        self.uiv_info.animateToNext {
+            self.uiv_info.isHidden = true
+        }
+    }
 
     fileprivate func showDialog(_ animationPattern: LSAnimationPattern) {
         let dialogViewController = SearchDialogUV(nibName: "SearchDialogUV", bundle: nil)
@@ -337,6 +402,105 @@ class MapVC: BaseVC {
 
     func dismissDialog() {
         dismissDialogViewController(LSAnimationPattern.fadeInOut)
+    }
+
+    func drawPolyline(from: LocationModel, destination: CLLocationCoordinate2D) {
+        if location_markers.count > 0 {
+            for one in location_markers {
+                one.map = nil
+            }
+        }
+        DispatchQueue.main.async {
+            let position = CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude)
+            let marker = GMSMarker()
+            marker.position = position
+            marker.map = self.mapView
+            marker.icon = UIImage.init(named: "location_marker")
+            self.location_markers.append(marker)
+        }
+        if polylines.count > 0 {
+            for one in polylines {
+                DispatchQueue.main.async {
+                    one.map = nil
+                    self.mapView.reloadInputViews()
+                }
+            }
+        }
+        let origin = "\(from.location_lat ?? 0),\(from.location_lang ?? 0)"
+        let destination = "\(destination.latitude),\(destination.longitude)"
+        let url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&mode=driving&key=\(Constants.DIRECTION_API_KEY)"
+        let walkingurl = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&mode=walking&key=\(Constants.DIRECTION_API_KEY)"
+        var distance = ""
+        var driving_time = ""
+        var walking_time = ""
+        Alamofire.request(walkingurl).responseJSON { response1 in
+            
+            let json1 = JSON(response1.data!)
+            let status = json1["status"].stringValue
+            if status == "OK"{
+                let routes = json1["routes"].arrayValue
+                if let json_data = routes.first{
+                    let legs = json_data["legs"].arrayValue
+                    if let legdata = legs.first{
+                        walking_time = JSON(JSON(legdata)["duration"])["text"].stringValue
+                        Alamofire.request(url).responseJSON { response in
+                            let json = JSON(response.data!)
+                            let status = json["status"].stringValue
+                            if status == "OK"{
+                                let routes = json["routes"].arrayValue
+                                if let json_data = routes.first{
+                                    let legs = json_data["legs"].arrayValue
+                                    if let legdata = legs.first{
+                                        distance = JSON(JSON(legdata)["distance"])["text"].stringValue
+                                        driving_time = JSON(JSON(legdata)["duration"])["text"].stringValue
+                                    }
+                                }
+                                var num = 0
+                                for route in routes {
+                                    num += 1
+                                    let routeOverviewPolyline = route["overview_polyline"].dictionary
+                                    let points = routeOverviewPolyline?["points"]?.stringValue
+                                    let path = GMSPath(fromEncodedPath: points!)
+
+                                    let polyline = GMSPolyline(path: path)
+                                    polyline.strokeColor = UIColor.systemIndigo
+                                    polyline.strokeWidth = 4.0
+                                    polyline.map = self.mapView
+                                    self.polylines.append(polyline)
+                                    if num == routes.count {
+                                        let replaced_walking_time = walking_time.replacingOccurrences(of: "days", with: "日").replacingOccurrences(of: "day", with: "日").replacingOccurrences(of: "hours", with: "時間").replacingOccurrences(of: "hour", with: "時間").replacingOccurrences(of: "mins", with: "分").replacingOccurrences(of: "min", with: "分")
+                                        let replaced_driving_time = driving_time.replacingOccurrences(of: "days", with: "日").replacingOccurrences(of: "day", with: "日").replacingOccurrences(of: "hours", with: "時間").replacingOccurrences(of: "hour", with: "時間").replacingOccurrences(of: "mins", with: "分").replacingOccurrences(of: "min", with: "分")
+                                        self.showInfo("距離:\(distance)  徒歩:\(replaced_walking_time)  車:\(replaced_driving_time)")
+                                    }
+                                }
+                            }else{
+                                self.uiv_info.force = 1
+                                self.uiv_info.duration = 1
+                                self.uiv_info.delay = 0
+                                self.uiv_info.damping = 0.7
+                                self.uiv_info.velocity = 0.7
+                                self.uiv_info.animation = Spring.AnimationPreset.FadeOut.rawValue
+                                self.uiv_info.curve = Spring.AnimationCurve.EaseOut.rawValue
+                                self.uiv_info.animateToNext {
+                                    self.uiv_info.isHidden = true
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                self.uiv_info.force = 1
+                self.uiv_info.duration = 1
+                self.uiv_info.delay = 0
+                self.uiv_info.damping = 0.7
+                self.uiv_info.velocity = 0.7
+                self.uiv_info.animation = Spring.AnimationPreset.FadeOut.rawValue
+                self.uiv_info.curve = Spring.AnimationCurve.EaseOut.rawValue
+                self.uiv_info.animateToNext {
+                    self.uiv_info.isHidden = true
+                }
+            }
+        }
     }
 }
 
@@ -367,20 +531,26 @@ extension MapVC: GMSMapViewDelegate {
         let newPoint = mapView.projection.coordinate(for: point)
         let camera = GMSCameraUpdate.setTarget(newPoint)
         mapView.animate(with: camera)
-        infoWindow.center = CGPoint(x: view.centerX, y: view.centerY - (Constants.SCREEN_HEIGHT / 5 - 170)) // iphone 6s
+        infoWindow.center = CGPoint(x: view.centerX, y: view.centerY - (Constants.SCREEN_HEIGHT / 5 - 190)) // iphone 6s
         for one in locations {
             if location_id == one.location_id {
                 infoWindow.loadData(location: one)
                 infoWindow.didTappedCancel = { () in
+                    self.selected_location = nil
+                    self.is_started_measure = false
                     infoWindow.removeFromSuperview()
                 }
                 infoWindow.didTappedShowDetail = {
+                    self.selected_location = nil
+                    self.is_started_measure = false
                     infoWindow.removeFromSuperview()
                     let tovc = self.createVC("LocationDetailVC") as! LocationDetailVC
                     tovc.location = one
                     self.navigationController?.pushViewController(tovc, animated: true)
                 }
                 infoWindow.didTappedShowRecent = { () in
+                    self.selected_location = nil
+                    self.is_started_measure = false
                     infoWindow.removeFromSuperview()
                     let tovc = self.createVC("LocationDetailVC") as! LocationDetailVC
                     tovc.location = one
@@ -388,47 +558,38 @@ extension MapVC: GMSMapViewDelegate {
                     self.navigationController?.pushViewController(tovc, animated: true)
                 }
                 infoWindow.didTappedFavorite = { () in
-                    if one.is_location_like {
-                        ApiManager.manageLocationLike(location_id: one.location_id, request_type: .unlike) { success, _ in
-                            if success {
-                                self.delegate?.updateStatus(status: false)
-                                one.is_location_like = false
+                    self.selected_location = nil
+                    self.is_started_measure = false
+                    if thisuser.isValid{
+                        if one.is_location_like {
+                            ApiManager.manageLocationLike(location_id: one.location_id, request_type: .unlike) { success, _ in
+                                if success {
+                                    self.delegate?.updateStatus(status: false)
+                                    one.is_location_like = false
+                                }
+                            }
+                        } else {
+                            ApiManager.manageLocationLike(location_id: one.location_id, request_type: .like) { success, _ in
+                                if success {
+                                    self.delegate?.updateStatus(status: true)
+                                    one.is_location_like = true
+                                }
                             }
                         }
-                    } else {
-                        ApiManager.manageLocationLike(location_id: one.location_id, request_type: .like) { success, _ in
-                            if success {
-                                self.delegate?.updateStatus(status: true)
-                                one.is_location_like = true
-                            }
-                        }
+                    }else{
+                        infoWindow.removeFromSuperview()
+                        self.requireLogin()
                     }
                 }
-                infoWindow.loginAction = { () in
-                    self.requireLogin()
-                }
-                infoWindow.didTappedFinish = { () in
-                }
-                
                 infoWindow.didTappedMeasure = { () in
-                    let origin = "\(one.location_lat ?? 0),\(one.location_lang ?? 0)"
-                    let destination = "\(35.68382748306113),\(139.7523487072757)"
-                    let url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&mode=driving&key=\(Constants.GOOGLE_API_KEY)"
-
-                    Alamofire.request(url).responseJSON { response in
-                        let json = JSON(response.data!)
-                        let routes = json["routes"].arrayValue
-
-                        for route in routes {
-                            let routeOverviewPolyline = route["overview_polyline"].dictionary
-                            let points = routeOverviewPolyline?["points"]?.stringValue
-                            let path = GMSPath(fromEncodedPath: points!)
-
-                            let polyline = GMSPolyline(path: path)
-                            polyline.strokeColor = .black
-                            polyline.strokeWidth = 10.0
-                            polyline.map = self.mapView
-                        }
+                    if thisuser.isValid{
+                        self.selected_location = one
+                        self.is_started_measure = true
+                        infoWindow.removeFromSuperview()
+                        self.showToastCenter("地図から目的地をお選びください")
+                    }else{
+                        infoWindow.removeFromSuperview()
+                        self.requireLogin()
                     }
                 }
                 mapView.addSubview(infoWindow)
@@ -443,11 +604,68 @@ extension MapVC: GMSMapViewDelegate {
     }
 
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        print(coordinate)
-        infoWindow?.removeFromSuperview()
+        if is_started_measure, let location = selected_location {
+            drawPolyline(from: location, destination: coordinate)
+        }
+    }
+}
+
+extension MapVC: CLLocationManagerDelegate{
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last?.coordinate{
+            self.mapView.animate(to: GMSCameraPosition.camera(withTarget: location, zoom: 17))
+            self.locationManager.stopUpdatingLocation()
+        }
     }
 }
 
 protocol InfoChangeDelegate {
     func updateStatus(status: Bool)
 }
+
+public extension UIColor {
+    convenience init(hex: String) {
+        var red:   CGFloat = 0.0
+        var green: CGFloat = 0.0
+        var blue:  CGFloat = 0.0
+        var alpha: CGFloat = 1.0
+        var hex:   String = hex
+        
+        if hex.hasPrefix("#") {
+            let index = hex.index(hex.startIndex, offsetBy: 1)
+            hex = String(hex[index...])
+        }
+        
+        let scanner = Scanner(string: hex)
+        var hexValue: CUnsignedLongLong = 0
+        if scanner.scanHexInt64(&hexValue) {
+            switch (hex.count) {
+            case 3:
+                red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
+                green = CGFloat((hexValue & 0x0F0) >> 4)       / 15.0
+                blue  = CGFloat(hexValue & 0x00F)              / 15.0
+            case 4:
+                red   = CGFloat((hexValue & 0xF000) >> 12)     / 15.0
+                green = CGFloat((hexValue & 0x0F00) >> 8)      / 15.0
+                blue  = CGFloat((hexValue & 0x00F0) >> 4)      / 15.0
+                alpha = CGFloat(hexValue & 0x000F)             / 15.0
+            case 6:
+                red   = CGFloat((hexValue & 0xFF0000) >> 16)   / 255.0
+                green = CGFloat((hexValue & 0x00FF00) >> 8)    / 255.0
+                blue  = CGFloat(hexValue & 0x0000FF)           / 255.0
+            case 8:
+                red   = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
+                green = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
+                blue  = CGFloat((hexValue & 0x0000FF00) >> 8)  / 255.0
+                alpha = CGFloat(hexValue & 0x000000FF)         / 255.0
+            default:
+                print("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8", terminator: "")
+            }
+        } else {
+            print("Scan hex error")
+        }
+        self.init(red:red, green:green, blue:blue, alpha:alpha)
+    }
+}
+
+

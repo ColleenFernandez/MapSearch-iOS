@@ -26,7 +26,7 @@ func getDiffTimestamp(_ tstamp: String) -> String {
     }else if hour >= 1{
         return "\(hour)時間前"
     }else if min >= 1{
-        return "\(min)数分前"
+        return "\(min)分前"
     }else{
         return "\(sec)秒前"
     }
