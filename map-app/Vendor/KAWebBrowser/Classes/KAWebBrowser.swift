@@ -88,11 +88,11 @@ open class KAWebBrowser: UIViewController , WKNavigationDelegate{
     }
     
     func addleftButton() {
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .bold, scale: .large)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large)
         let btn_back = UIButton(type: .custom)
         btn_back.setImage(UIImage.init(systemName: "chevron.left")!.withConfiguration(largeConfig).withRenderingMode(.alwaysTemplate).withTintColor(.black), for: .normal)
         btn_back.addTarget(self, action: #selector(gotoHome), for: .touchUpInside)
-        btn_back.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        btn_back.imageEdgeInsets = UIEdgeInsets(top: 6.5, left: 5, bottom: 6.5, right: 5)
         btn_back.tintColor = .black
         let barButtonItemBack = UIBarButtonItem(customView: btn_back)
         self.navigationItem.leftBarButtonItem = barButtonItemBack

@@ -18,6 +18,7 @@ class SplashVC: BaseVC {
     var location: LocationModel?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setNavigationTopColor()
         hideNavBar()
         checkBackgrouond()
     }
@@ -27,6 +28,14 @@ class SplashVC: BaseVC {
         DispatchQueue.main.asyncAfter(deadline: .now() + 15.0, execute: {
             //self.showAlertMessage(msg: Messages.NETISSUE)
         })
+    }
+    
+    func setNavigationTopColor(){
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor.init(named: "color_primary")
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = self.navigationController?.navigationBar.standardAppearance
     }
 
     func checkBackgrouond(){

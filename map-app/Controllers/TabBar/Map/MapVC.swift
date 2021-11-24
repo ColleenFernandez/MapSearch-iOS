@@ -10,19 +10,21 @@ import FirebaseDatabase
 import GoogleMaps
 import Kingfisher
 import LSDialogViewController
+import Spring
 import SwiftyJSON
 import UIKit
-import Spring
+import CoreLocation
 
 var gMapVC: UIViewController?
 
 class MapVC: BaseVC {
     @IBOutlet var mapView: GMSMapView!
     @IBOutlet var cus_right_badge: BadgeBarButtonItem!
+    @IBOutlet var cus_total_noti_unread_badge: BadgeBarButtonItem!
     @IBOutlet var uiv_info: SpringView!
-    @IBOutlet weak var uiv_background: UIView!
+    @IBOutlet var uiv_background: UIView!
     @IBOutlet var lbl_info: UILabel!
-    
+
     var zoom: Float = 15
     var tappedMarker: GMSMarker?
 
@@ -39,20 +41,32 @@ class MapVC: BaseVC {
     var bagdeChangeHandle: UInt?
     var bagdeGetHandle: UInt?
     let badgePath = Database.database().reference().child("badge").child("\(thisuser.user_id ?? 0)")
-
+    var infoWindow: InfoWindow?
     // polylines
     var polylines = [GMSPolyline]()
-    var is_started_measure: Bool = false
+    var is_started_markerlocation_measure: Bool = false
+    var is_started_mylocation_measure: Bool = false
+    var is_loading_marker: Bool = false
     var selected_location: LocationModel?
     var location_markers = [GMSMarker]()
+    var mylocation: CLLocationCoordinate2D?
+    var total_noti = [TotalNotiModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showNavBar()
         setUI()
         mapView.mapStyle(withFilename: "map_style", andType: "json")
         gMapVC = self
+        // from will appear method
+        polylines.removeAll()
+        
+        setInfoUI()
+        // Location Manager code to fetch current location
+        initializeTheLocationManager()
+        mapView.isMyLocationEnabled = true
     }
-    
+
     func initializeTheLocationManager() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -61,14 +75,8 @@ class MapVC: BaseVC {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        polylines.removeAll()
         location_markers.removeAll()
-        showNavBar()
         setMapMarkers()
-        setInfoUI()
-        //Location Manager code to fetch current location
-        initializeTheLocationManager()
-        self.mapView.isMyLocationEnabled = true
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -77,36 +85,36 @@ class MapVC: BaseVC {
     }
 
     func setInfoUI() {
-        self.uiv_info.isHidden = true
+        uiv_info.isHidden = true
         uiv_info.roundCorners([.bottomLeft, .bottomRight], radius: 10)
     }
-    
+
     func showInfo(_ text: String) {
-        self.uiv_info.isHidden = false
+        uiv_info.isHidden = false
         UIView.animate(withDuration: 0.1, animations: {
-            //self.uiv_background.backgroundColor = UIColor(hex: "69DBFF")
-        }, completion: { finished in
+            // self.uiv_background.backgroundColor = UIColor(hex: "69DBFF")
+        }, completion: { _ in
             UIView.animate(withDuration: 0.5, animations: {
-                //self.uiv_background.backgroundColor = UIColor(hex: "279CEB")
+                // self.uiv_background.backgroundColor = UIColor(hex: "279CEB")
                 self.lbl_info.text = text
             })
         })
-        
+
         animateView()
     }
-    
-    func animateView(){
+
+    func animateView() {
         uiv_info.force = 1
         uiv_info.duration = 1
         uiv_info.delay = 0
-        
+
         uiv_info.damping = 0.7
         uiv_info.velocity = 0.7
         uiv_info.animation = Spring.AnimationPreset.FadeInDown.rawValue
         uiv_info.curve = Spring.AnimationCurve.EaseIn.rawValue
         uiv_info.animate()
     }
-    
+
     func setUI() {
         navigationItem.title = Messages.MAP
         mapView.delegate = self
@@ -243,6 +251,7 @@ class MapVC: BaseVC {
         locations.removeAll()
         markers.removeAll()
         marks.removeAll()
+        total_noti.removeAll()
         location_options.removeAll()
         locations.removeAll()
         mapView.clear()
@@ -283,6 +292,19 @@ class MapVC: BaseVC {
                             }
                         }
                     }
+                }
+                if let total_noti_data = dict["total_noti_info"].arrayObject {
+                    if total_noti_data.count > 0 {
+                        for one in total_noti_data {
+                            self.total_noti.append(TotalNotiModel(JSON(one)))
+                        }
+                    }
+                }
+                let unread_num = dict["total_noti_unread_num"].intValue
+                if unread_num > 0{
+                    self.cus_total_noti_unread_badge.badgeNumber = unread_num
+                }else{
+                    self.cus_total_noti_unread_badge.badgeNumber = 0
                 }
             }
         }
@@ -325,6 +347,17 @@ class MapVC: BaseVC {
                     imv_badgenew.contentMode = .scaleAspectFit
                     imv_badgenew.setNeedsLayout()
                 }
+                if one.is_location_like {
+                    let imv_badgenew = UIImageView()
+                    imv_badgenew.image = UIImage(named: "ic_heart")
+                    imv_badgenew.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+                    imgView.addSubview(imv_badgenew)
+                    imv_badgenew.center.x = imgView.center.x + 20
+                    imv_badgenew.center.y = imgView.center.y - 24
+                    imv_badgenew.clipsToBounds = true
+                    imv_badgenew.contentMode = .scaleAspectFit
+                    imv_badgenew.setNeedsLayout()
+                }
                 marker.icon = self!.imageWithView(view: imgView)
             }
         }
@@ -362,6 +395,13 @@ class MapVC: BaseVC {
             requireLogin()
         }
     }
+    
+    @IBAction func gotoTotalNotiVC(_ sender: UIButton) {
+        let tovc = TotalNotiVC()
+        tovc.modalPresentationStyle = .fullScreen
+        tovc.ds_total_noti = self.total_noti
+        navigationController?.pushViewController(tovc, animated: true)
+    }
 
     @IBAction func btnMyLocation(_ sender: UIButton) {
         guard let lat = mapView.myLocation?.coordinate.latitude, let lng = mapView.myLocation?.coordinate.longitude else {
@@ -379,16 +419,32 @@ class MapVC: BaseVC {
     @IBAction func filterBtnClicked(_ sender: Any) {
         showDialog(.fadeInOut)
     }
-    
+
     @IBAction func dismissBtnClicked(_ sender: Any) {
-        self.uiv_info.force = 1
-        self.uiv_info.duration = 1
-        self.uiv_info.delay = 0
-        self.uiv_info.damping = 0.7
-        self.uiv_info.velocity = 0.7
-        self.uiv_info.animation = Spring.AnimationPreset.FadeOut.rawValue
-        self.uiv_info.curve = Spring.AnimationCurve.EaseOut.rawValue
-        self.uiv_info.animateToNext {
+        if polylines.count > 0 {
+            for one in polylines {
+                DispatchQueue.main.async {
+                    one.map = nil
+                    self.mapView.reloadInputViews()
+                }
+            }
+        }
+        if location_markers.count > 0 {
+            for one in location_markers {
+                one.map = nil
+            }
+        }
+        uiv_info.force = 1
+        uiv_info.duration = 1
+        uiv_info.delay = 0
+        uiv_info.damping = 0.7
+        uiv_info.velocity = 0.7
+        uiv_info.animation = Spring.AnimationPreset.FadeOut.rawValue
+        uiv_info.curve = Spring.AnimationCurve.EaseOut.rawValue
+        uiv_info.animateToNext {
+            self.selected_location = nil
+            self.is_started_markerlocation_measure = false
+            self.is_started_mylocation_measure = false
             self.uiv_info.isHidden = true
         }
     }
@@ -415,7 +471,7 @@ class MapVC: BaseVC {
             let marker = GMSMarker()
             marker.position = position
             marker.map = self.mapView
-            marker.icon = UIImage.init(named: "location_marker")
+            marker.icon = UIImage(named: "location_marker")
             self.location_markers.append(marker)
         }
         if polylines.count > 0 {
@@ -434,23 +490,23 @@ class MapVC: BaseVC {
         var driving_time = ""
         var walking_time = ""
         Alamofire.request(walkingurl).responseJSON { response1 in
-            
+
             let json1 = JSON(response1.data!)
             let status = json1["status"].stringValue
-            if status == "OK"{
+            if status == "OK" {
                 let routes = json1["routes"].arrayValue
-                if let json_data = routes.first{
+                if let json_data = routes.first {
                     let legs = json_data["legs"].arrayValue
-                    if let legdata = legs.first{
+                    if let legdata = legs.first {
                         walking_time = JSON(JSON(legdata)["duration"])["text"].stringValue
                         Alamofire.request(url).responseJSON { response in
                             let json = JSON(response.data!)
                             let status = json["status"].stringValue
-                            if status == "OK"{
+                            if status == "OK" {
                                 let routes = json["routes"].arrayValue
-                                if let json_data = routes.first{
+                                if let json_data = routes.first {
                                     let legs = json_data["legs"].arrayValue
-                                    if let legdata = legs.first{
+                                    if let legdata = legs.first {
                                         distance = JSON(JSON(legdata)["distance"])["text"].stringValue
                                         driving_time = JSON(JSON(legdata)["duration"])["text"].stringValue
                                     }
@@ -473,7 +529,7 @@ class MapVC: BaseVC {
                                         self.showInfo("距離:\(distance)  徒歩:\(replaced_walking_time)  車:\(replaced_driving_time)")
                                     }
                                 }
-                            }else{
+                            } else {
                                 self.uiv_info.force = 1
                                 self.uiv_info.duration = 1
                                 self.uiv_info.delay = 0
@@ -488,7 +544,7 @@ class MapVC: BaseVC {
                         }
                     }
                 }
-            }else{
+            } else {
                 self.uiv_info.force = 1
                 self.uiv_info.duration = 1
                 self.uiv_info.delay = 0
@@ -500,6 +556,33 @@ class MapVC: BaseVC {
                     self.uiv_info.isHidden = true
                 }
             }
+        }
+    }
+    
+    public func presentAlert(from sourceView: UIView, location: LocationModel) {
+        let alertController = UIAlertController(title: "開始位置を選択してください", message: nil, preferredStyle: .actionSheet)
+        
+        if let action = self.action(title: "選択したマーカーから開始", location: location) {
+            self.selected_location = location
+            alertController.addAction(action)
+        }
+        
+        if let action = self.action(title: "現在の私の場所から開始", location: location) {
+            alertController.addAction(action)
+        }
+        
+        alertController.addAction(UIAlertAction(title: Messages.CANCEL, style: .cancel, handler: nil))
+        self.present(alertController, animated: true)
+    }
+    
+    private func action(title: String, location: LocationModel) -> UIAlertAction? {
+        return UIAlertAction(title: title, style: .default) {  _ in
+            if title == "選択したマーカーから開始"{
+                self.is_started_markerlocation_measure = true
+            }else if title == "現在の私の場所から開始"{
+                self.is_started_mylocation_measure = true
+            }
+            self.showToastCenter("地図から目的地をお選びください")
         }
     }
 }
@@ -524,7 +607,13 @@ extension MapVC: GMSMapViewDelegate {
 
         let location_id = marker.title?.toInt() ?? 0
         let infoWindow = InfoWindow().loadView()
-        // get osition of tapped marker
+        self.is_loading_marker = true
+        if let infoWindow = self.infoWindow{
+            infoWindow.removeFromSuperview()
+            self.infoWindow = nil
+        }
+        self.infoWindow = infoWindow
+        // get position of tapped marker
         let position = marker.position
         mapView.animate(toLocation: position)
         let point = mapView.projection.point(for: position)
@@ -537,12 +626,14 @@ extension MapVC: GMSMapViewDelegate {
                 infoWindow.loadData(location: one)
                 infoWindow.didTappedCancel = { () in
                     self.selected_location = nil
-                    self.is_started_measure = false
+                    self.is_started_markerlocation_measure = false
+                    self.is_started_mylocation_measure = false
                     infoWindow.removeFromSuperview()
                 }
                 infoWindow.didTappedShowDetail = {
                     self.selected_location = nil
-                    self.is_started_measure = false
+                    self.is_started_markerlocation_measure = false
+                    self.is_started_mylocation_measure = false
                     infoWindow.removeFromSuperview()
                     let tovc = self.createVC("LocationDetailVC") as! LocationDetailVC
                     tovc.location = one
@@ -550,7 +641,8 @@ extension MapVC: GMSMapViewDelegate {
                 }
                 infoWindow.didTappedShowRecent = { () in
                     self.selected_location = nil
-                    self.is_started_measure = false
+                    self.is_started_markerlocation_measure = false
+                    self.is_started_mylocation_measure = false
                     infoWindow.removeFromSuperview()
                     let tovc = self.createVC("LocationDetailVC") as! LocationDetailVC
                     tovc.location = one
@@ -559,13 +651,15 @@ extension MapVC: GMSMapViewDelegate {
                 }
                 infoWindow.didTappedFavorite = { () in
                     self.selected_location = nil
-                    self.is_started_measure = false
-                    if thisuser.isValid{
+                    self.is_started_markerlocation_measure = false
+                    self.is_started_mylocation_measure = false
+                    if thisuser.isValid {
                         if one.is_location_like {
                             ApiManager.manageLocationLike(location_id: one.location_id, request_type: .unlike) { success, _ in
                                 if success {
                                     self.delegate?.updateStatus(status: false)
                                     one.is_location_like = false
+                                    self.setMapMarkers()
                                 }
                             }
                         } else {
@@ -573,29 +667,30 @@ extension MapVC: GMSMapViewDelegate {
                                 if success {
                                     self.delegate?.updateStatus(status: true)
                                     one.is_location_like = true
+                                    self.setMapMarkers()
                                 }
                             }
                         }
-                    }else{
+                    } else {
                         infoWindow.removeFromSuperview()
                         self.requireLogin()
                     }
                 }
                 infoWindow.didTappedMeasure = { () in
-                    if thisuser.isValid{
-                        self.selected_location = one
-                        self.is_started_measure = true
+                    if thisuser.isValid {
                         infoWindow.removeFromSuperview()
-                        self.showToastCenter("地図から目的地をお選びください")
-                    }else{
+                        self.presentAlert(from: self.view, location: one)
+                    } else {
                         infoWindow.removeFromSuperview()
                         self.requireLogin()
                     }
                 }
                 mapView.addSubview(infoWindow)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.is_loading_marker = false
+                }
             }
         }
-
         return false
     }
 
@@ -604,17 +699,32 @@ extension MapVC: GMSMapViewDelegate {
     }
 
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        if is_started_measure, let location = selected_location {
+        if is_started_markerlocation_measure, let location = selected_location {
             drawPolyline(from: location, destination: coordinate)
+        }else if is_started_mylocation_measure {
+            if let mylocation = self.mylocation{
+                drawPolyline(from: LocationModel(mylocation), destination: coordinate)
+            }else{
+                self.showAlertMessage(title: nil, msg: "現在地へのアクセスを許可しませんでした。システム設定で位置情報へのアクセスを許可してください。")
+            }
+        }
+    }
+    
+    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        if let infoWindow = infoWindow{
+            if !self.is_loading_marker{
+                infoWindow.removeFromSuperview()
+            }
         }
     }
 }
 
-extension MapVC: CLLocationManagerDelegate{
+extension MapVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last?.coordinate{
-            self.mapView.animate(to: GMSCameraPosition.camera(withTarget: location, zoom: 17))
-            self.locationManager.stopUpdatingLocation()
+        if let location = locations.last?.coordinate {
+            self.mylocation = location
+            mapView.animate(to: GMSCameraPosition.camera(withTarget: location, zoom: 15))
+            locationManager.stopUpdatingLocation()
         }
     }
 }
@@ -622,50 +732,3 @@ extension MapVC: CLLocationManagerDelegate{
 protocol InfoChangeDelegate {
     func updateStatus(status: Bool)
 }
-
-public extension UIColor {
-    convenience init(hex: String) {
-        var red:   CGFloat = 0.0
-        var green: CGFloat = 0.0
-        var blue:  CGFloat = 0.0
-        var alpha: CGFloat = 1.0
-        var hex:   String = hex
-        
-        if hex.hasPrefix("#") {
-            let index = hex.index(hex.startIndex, offsetBy: 1)
-            hex = String(hex[index...])
-        }
-        
-        let scanner = Scanner(string: hex)
-        var hexValue: CUnsignedLongLong = 0
-        if scanner.scanHexInt64(&hexValue) {
-            switch (hex.count) {
-            case 3:
-                red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
-                green = CGFloat((hexValue & 0x0F0) >> 4)       / 15.0
-                blue  = CGFloat(hexValue & 0x00F)              / 15.0
-            case 4:
-                red   = CGFloat((hexValue & 0xF000) >> 12)     / 15.0
-                green = CGFloat((hexValue & 0x0F00) >> 8)      / 15.0
-                blue  = CGFloat((hexValue & 0x00F0) >> 4)      / 15.0
-                alpha = CGFloat(hexValue & 0x000F)             / 15.0
-            case 6:
-                red   = CGFloat((hexValue & 0xFF0000) >> 16)   / 255.0
-                green = CGFloat((hexValue & 0x00FF00) >> 8)    / 255.0
-                blue  = CGFloat(hexValue & 0x0000FF)           / 255.0
-            case 8:
-                red   = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
-                green = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
-                blue  = CGFloat((hexValue & 0x0000FF00) >> 8)  / 255.0
-                alpha = CGFloat(hexValue & 0x000000FF)         / 255.0
-            default:
-                print("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8", terminator: "")
-            }
-        } else {
-            print("Scan hex error")
-        }
-        self.init(red:red, green:green, blue:blue, alpha:alpha)
-    }
-}
-
-

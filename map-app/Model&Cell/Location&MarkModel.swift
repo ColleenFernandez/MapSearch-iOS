@@ -11,6 +11,7 @@ import Kingfisher
 import SwiftyJSON
 import AVKit
 import UIKit
+import CoreLocation
 
 class LocationModel {
 
@@ -63,6 +64,11 @@ class LocationModel {
             }
         }
         self.has_new_noti = Int64(NSDate().timeIntervalSince1970) - one[PARAMS.LAST_UPDATED].int64Value <= Constants.ONE_WEEK_TIMESTAMP ? true : false
+    }
+    
+    init(_ one: CLLocationCoordinate2D){
+        self.location_lat = one.latitude
+        self.location_lang = one.longitude
     }
 }
 

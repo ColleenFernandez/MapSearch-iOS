@@ -64,7 +64,7 @@ class InfoWindow: UIView {
                 self.lbl_recenttitle.text = nil
                 self.cons_h_scr.constant = 0
             }else{
-                if let one = post.last{
+                if let one = post.first{
                     self.lbl_recenttitle.text! = "\(one.post_title ?? "")"
                     self.lbl_post_time.text = getStrDate(one.post_time ?? "")
                 }

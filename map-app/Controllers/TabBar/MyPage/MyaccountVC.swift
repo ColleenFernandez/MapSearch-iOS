@@ -65,7 +65,7 @@ class MyaccountVC: BaseVC {
         setChangePwd(false)
         lbl_username.text = thisuser.user_name
         imv_avatar.kf.indicatorType = .activity
-        imv_avatar.kf.setImage(with: URL(string: thisuser.user_photo ?? ""), placeholder: UIImage.init(named: "ic_logo"))
+        imv_avatar.kf.setImage(with: URL(string: thisuser.user_photo ?? ""), placeholder: UIImage.init(named: "ic_user"))
         edtusername.text = thisuser.user_name
         txv_selfintro.text = thisuser.user_description
         edtpassword.isSecureTextEntry = true

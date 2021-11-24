@@ -19,11 +19,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
         if let windowScene = scene as? UIWindowScene {
-            self.window = UIWindow(windowScene: windowScene)
-            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashNav")
-            self.window?.rootViewController = initialViewController
-            self.window!.makeKeyAndVisible()
+//            self.window = UIWindow(windowScene: windowScene)
+//            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+//            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashNav")
+//            self.window?.rootViewController = initialViewController
+//            self.window!.makeKeyAndVisible()
         }
         Self.shared = self
     }
@@ -40,11 +40,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // update pushnotification setting
         guard let _ = (scene as? UIWindowScene) else { return }
         if let windowScene = scene as? UIWindowScene {
-            self.window = UIWindow(windowScene: windowScene)
-            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashNav")
-            self.window?.rootViewController = initialViewController
-            self.window!.makeKeyAndVisible()
+//            self.window = UIWindow(windowScene: windowScene)
+//            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+//            let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashNav")
+//            self.window?.rootViewController = initialViewController
+//            self.window!.makeKeyAndVisible()
         }
     }
     

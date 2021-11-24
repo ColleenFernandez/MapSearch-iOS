@@ -91,10 +91,6 @@ class SignUpVC: BaseVC {
         password = self.edtpassword.text ?? ""
         confirmpassword = self.edtconfirmpassword.text ?? ""
         user_description = self.txv_intro.text ?? ""
-        if self.attachments.count == 0{
-            self.showToast("ユーザーの写真を追加してください。")
-            return
-        }
         if usertName.isEmpty{
             self.showToast(Messages.USERNAME_REQUIRE)
             return

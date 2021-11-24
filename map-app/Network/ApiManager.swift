@@ -9,6 +9,7 @@
 import Alamofire
 import Foundation
 import SwiftyJSON
+import UIKit
 // ************************************************************************//
                             // MAP app project //
 // ************************************************************************//
@@ -172,8 +173,8 @@ class ApiManager {
         }
     }
     
-    class func getLocations(completion: @escaping (_ success: Bool, _ response: Any?) -> Void) {
-        let params = [PARAMS.USER_ID: thisuser.user_id ?? 0] as [String: Any]
+    class func getLocations(request_type:LocationRequestType! = .all_location , completion: @escaping (_ success: Bool, _ response: Any?) -> Void) {
+        let params = [PARAMS.USER_ID: thisuser.user_id ?? 0, PARAMS.REQUEST_TYPE: request_type.rawValue, PARAMS.UUID: Constants.uuid ?? "0"] as [String: Any]
 
         Alamofire.request(SERVER_URL + "getLocations", method: .post, parameters: params)
         .responseJSON { response in
@@ -191,6 +192,26 @@ class ApiManager {
             }
         }
     }
+    
+    class func setTotalNotiRead(ids: String, completion: @escaping (_ success: Bool, _ response: Any?) -> Void) {
+        let params = ["total_noti_ids": ids, PARAMS.UUID: Constants.uuid ?? "0"] as [String: Any]
+        Alamofire.request(SERVER_URL + "setTotalNotiRead", method: .post, parameters: params)
+        .responseJSON { response in
+            switch response.result {
+            case .failure:
+                completion(false, nil)
+            case let .success(data):
+                let dict = JSON(data)
+                let status = dict[PARAMS.RESULTCODE].intValue // 0,1,2
+                if status == SUCCESSTRUE {
+                    completion(true, dict)
+                } else {
+                    completion(false, status)
+                }
+            }
+        }
+    }
+    
     
     class func forgot(email: String, completion :  @escaping (_ success: Bool, _ response : Any?) -> ()) {
         let params = [PARAMS.EMAIL: email] as [String : Any]

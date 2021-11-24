@@ -81,9 +81,11 @@ struct PARAMS {
     static let HAS_NEW_NOTI = "has_new_noti"
     static let LOCATION_MEMO = "location_memo"
     static let LAST_UPDATED = "last_updated"
+    static let UUID = "uuid"
 }
 
 struct Messages {
+    static let LOGIN                    = "ログイン"
     static let ACCOUNT                    = "アカウント"
     static let ACCEPT                    = "受け入れる"
     static let ACCEPTED                  = "受け入れ"
@@ -178,6 +180,7 @@ struct Messages {
     static let PRIVACY                   = "個人情報保護方針"
     static let PRIVACY_KAN                   = "プライバシーポリシー"
     static let PROFILE                   = "プロフィール"
+    static let FAVORITE_LOCATION_LIST    = "お気に入り施設一覧"
     static let REFUND                    = "払い戻し"
     static let REGISTER_YOUR_PET         = "ペット登録します"
     static let REJECT                    = "拒絶"
@@ -228,6 +231,7 @@ struct Messages {
     static let YOUCANTREPORTYOURPOST     = "自分の投稿を直接報告することができません"
     static let MAP = "地図"
     static let ETC = "その他"
+    static let TOTAL_NOTI = "全ユーザーへの通知"
 }
 
 struct Constants {
@@ -240,6 +244,7 @@ struct Constants {
     static let GOOGLE_API_KEY = "AIzaSyDigbXIHJ2q5mQnubsKz4dxLek8heVX69c"
     static let DIRECTION_API_KEY = "AIzaSyDs247oW0HsnxfIA86Ar9IQYI1bC4TwnAg"
     static let ONE_WEEK_TIMESTAMP  = 604800
+    static let uuid = UIDevice.current.identifierForVendor?.uuidString
 }
 
 struct COLORS {
@@ -249,8 +254,10 @@ struct COLORS {
 
 struct SettingOptions {
     static let setting_section = [Messages.ACCOUNT, Messages.ETC]
-    static let settingOption_section1 = [Messages.PROFILE]
+    static let settingOption_section0 = [Messages.FAVORITE_LOCATION_LIST]
+    static let settingOption_section1 = [Messages.LOGIN, Messages.FAVORITE_LOCATION_LIST]
     static let settingOption_section2 = [Messages.TERMS, Messages.PRIVACY_KAN, Messages.CONTACT_US, Messages.LOGOUT]
+    static let settingOption_section3 = [Messages.TERMS, Messages.PRIVACY_KAN, Messages.CONTACT_US]
 }
 
 enum LikeType: Int {
@@ -261,6 +268,11 @@ enum LikeType: Int {
 enum NoteActionType: Int {
     case upload = 0
     case update = 1
+}
+
+enum LocationRequestType: Int{
+    case all_location = 0
+    case my_favorite_location = 1
 }
 
 

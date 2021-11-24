@@ -21,8 +21,8 @@ class LocationDetailVC: BaseVC {
     @IBOutlet weak var lbl_location_memo: UILabel!
     @IBOutlet var scr_container: UIScrollView!
     @IBOutlet var btn_favorite: UIButton!
-    @IBOutlet var tbl_home: UITableView!
-    @IBOutlet var cons_tbl_post: NSLayoutConstraint!
+    @IBOutlet var tbl_home: DynamicSizeTableView!
+    //@IBOutlet var cons_tbl_post: NSLayoutConstraint!
     @IBOutlet var cons_h_imv_location: NSLayoutConstraint!
     @IBOutlet weak var indc_imv_location: UIActivityIndicatorView!
     var is_last_post: Bool = false
@@ -38,12 +38,12 @@ class LocationDetailVC: BaseVC {
     }
     
     func addCustomBackButton() {
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .bold, scale: .large)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large)
         let btn_back = UIButton(type: .custom)
         btn_back.setImage(UIImage.init(systemName: "chevron.left")!.withConfiguration(largeConfig).withRenderingMode(.alwaysTemplate).withTintColor(.black), for: .normal)
         
         btn_back.addTarget(self, action: #selector(btnCustomActionBackClicked), for: .touchUpInside)
-        btn_back.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        btn_back.imageEdgeInsets = UIEdgeInsets(top: 6.5, left: 5, bottom: 6.5, right: 5)
         btn_back.tintColor = .black
         let barButtonItemBack = UIBarButtonItem(customView: btn_back)
         self.navigationItem.leftBarButtonItem = barButtonItemBack
@@ -89,18 +89,21 @@ class LocationDetailVC: BaseVC {
                 if posts.count > 0 {
                     ds_post = posts
                     tbl_home.reloadData()
-                    if is_last_post{
-                        DispatchQueue.main.async {
-                            let bottomOffset = CGPoint(x: 0, y: self.scr_container.contentSize.height - self.scr_container.bounds.size.height)
-                            self.scr_container.setContentOffset(bottomOffset, animated: true)
-                            self.tbl_home.scrollToBottomRow()
-                        }
-                    }
+                    tbl_home.invalidateIntrinsicContentSize()
+                    print("this is tableview height ===> ", tbl_home.intrinsicContentSize)
+                    print("this is tableview contentsize ===> ", tbl_home.contentSize)
+//                    if is_last_post{
+//                        DispatchQueue.main.async {
+//                            let bottomOffset = CGPoint(x: 0, y: self.scr_container.contentSize.height - self.scr_container.bounds.size.height)
+//                            self.scr_container.setContentOffset(bottomOffset, animated: true)
+//                            self.tbl_home.scrollToBottomRow()
+//                        }
+//                    }
                 } else {
-                    cons_tbl_post.constant = 0
+                    //cons_tbl_post.constant = 0
                 }
             } else {
-                cons_tbl_post.constant = 0
+                //cons_tbl_post.constant = 0
             }
         }
     }
@@ -222,5 +225,19 @@ extension UITableView {
         let section = indexPath.section
         let row = indexPath.row
         return section < self.numberOfSections && row < self.numberOfRows(inSection: section)
+    }
+}
+
+public class DynamicSizeTableView: UITableView
+{
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        if bounds.size != intrinsicContentSize {
+            invalidateIntrinsicContentSize()
+        }
+    }
+
+    override public var intrinsicContentSize: CGSize {
+        return contentSize
     }
 }

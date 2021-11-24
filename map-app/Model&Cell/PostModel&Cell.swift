@@ -52,6 +52,8 @@ class PostCell: UITableViewCell{
     @IBOutlet weak var lbl_post_des: UILabel!
     @IBOutlet weak var lbl_post_title: UILabel!
     @IBOutlet weak var indc_imv_post: UIActivityIndicatorView!
+    @IBOutlet weak var lbl_post_time: UILabel!
+    
     var noteAction: (() -> ())?
     func setDataSource(_ one: PostModel!) {
         lbl_post_title.text = one.post_title
@@ -59,6 +61,7 @@ class PostCell: UITableViewCell{
         imv_post.kf.setImage(with: URL(string: one.post_content ?? ""), placeholder: UIImage.init(named: "ic_logo"))
         lbl_post_des.text = one.post_des
         cons_h_imv.constant = (Constants.SCREEN_WIDTH - 30) * CGFloat(one.media_ratio)
+        lbl_post_time.text = getStrDate(one.post_time ?? "")
         /*getData(from: URL(string: one.post_content ?? "")!) { data, response, error in
             guard let data = data, error == nil else { return }
             DispatchQueue.main.async() { [weak self] in

@@ -157,6 +157,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 }
                             }
                         }
+                    }else{
+                        SwiftMessages.hide()
                     }
                 })
                 view.configureTheme(backgroundColor: .blue, foregroundColor: UIColor.white, iconImage: icon, iconText: nil)

@@ -13,6 +13,9 @@ class MyPageVC: BaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         showNavBar()
+        if thisuser.isValid{
+            self.tbl_setting.reloadData()
+        }
     }
 
     override func viewDidLoad() {
@@ -20,27 +23,49 @@ class MyPageVC: BaseVC {
         navigationItem.title = Messages.MY_PAGE
         tbl_setting.register(UINib(nibName: "SettingHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: SettingHeader.reuseIdentifier)
         tbl_setting.tableFooterView = UIView(frame: .zero)
+        tbl_setting.register(UINib(nibName: "ProfileCell", bundle: nil), forCellReuseIdentifier: "ProfileCell")
+        tbl_setting.estimatedRowHeight = 80
     }
 }
 
 extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tbl_setting.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath) as! SettingCell
-            cell.entity = SettingOptions.settingOption_section1[indexPath.row]
-            return cell
+            if thisuser.isValid{
+                if indexPath.row == 0{
+                    let cell = tbl_setting.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileCell
+                    cell.setProfile()
+                    return cell
+                }else{
+                    let cell = tbl_setting.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath) as! SettingCell
+                    cell.entity = SettingOptions.settingOption_section0[0]
+                    return cell
+                }
+            }else{
+                let cell = tbl_setting.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath) as! SettingCell
+                cell.entity = SettingOptions.settingOption_section1[indexPath.row]
+                return cell
+            }
         } else {
             let cell = tbl_setting.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath) as! SettingCell
-            cell.entity = SettingOptions.settingOption_section2[indexPath.row]
+            if thisuser.isValid{
+                cell.entity = SettingOptions.settingOption_section2[indexPath.row]
+            }else{
+                cell.entity = SettingOptions.settingOption_section3[indexPath.row]
+            }
             return cell
         }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return SettingOptions.settingOption_section1.count
+            return 2
         } else {
-            return SettingOptions.settingOption_section2.count
+            if thisuser.isValid{
+                return SettingOptions.settingOption_section2.count
+            }else{
+                return SettingOptions.settingOption_section3.count
+            }
         }
     }
 
@@ -65,7 +90,20 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 48
+        if indexPath.section == 0{
+            if indexPath.row == 0{
+                if thisuser.isValid{
+                    return UITableView.automaticDimension
+                }else{
+                    return 48
+                }
+            }else{
+                return 48
+            }
+        }else{
+            return 48
+        }
+        
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -75,6 +113,12 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
             case 0:
                 if thisuser.isValid{
                     self.gotoNavPresent("MyaccountVC", fullscreen: true)
+                }else{
+                    self.gotoVC("LoginNav")
+                }
+            case 1:
+                if thisuser.isValid{
+                    self.navigationController?.pushViewController(FavoriteLocationListVC(), animated: true)
                 }else{
                     self.requireLogin()
                 }
@@ -96,7 +140,7 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
                     let alertController = UIAlertController(title: "注意", message: "ログアウトしてもよろしいですか？", preferredStyle: .alert)
                     let OKAction = UIAlertAction(title: "はい", style: .default) { (_: UIAlertAction!) in
                         thisuser.clearUserInfo()
-                        self.gotoVC("LoginNav")
+                        self.gotoTabControllerWithIndex(0)
                     }
                     let cancelAction = UIAlertAction(title: "いいえ", style: .default) { (_: UIAlertAction!) in
                     }

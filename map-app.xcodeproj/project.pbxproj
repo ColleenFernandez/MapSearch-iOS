@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		477D51063376D564584E6444 /* Pods_map_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C0E4E2A659885A8433CBC4E /* Pods_map_app.framework */; };
+		8415AAE9274C607E003FADCF /* UIColor+Extentsion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8415AAE8274C607E003FADCF /* UIColor+Extentsion.swift */; };
+		8415AAEC274C7929003FADCF /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8415AAEA274C7929003FADCF /* ProfileCell.swift */; };
+		8415AAED274C7929003FADCF /* ProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8415AAEB274C7929003FADCF /* ProfileCell.xib */; };
 		84184EC927398B0F00CD65BD /* SearchDialogUV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84184EC727398B0F00CD65BD /* SearchDialogUV.swift */; };
 		84184ECA27398B0F00CD65BD /* SearchDialogUV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84184EC827398B0F00CD65BD /* SearchDialogUV.xib */; };
 		84184ED127398D9700CD65BD /* AlwaysShowPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84184ECC27398D9700CD65BD /* AlwaysShowPopup.swift */; };
@@ -17,6 +20,11 @@
 		84184ED527398D9700CD65BD /* SelectorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84184ED027398D9700CD65BD /* SelectorTableViewController.swift */; };
 		844983FE273B13730017495C /* NoteDialogUV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844983FC273B13730017495C /* NoteDialogUV.xib */; };
 		844983FF273B13730017495C /* NoteDialogUV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844983FD273B13730017495C /* NoteDialogUV.swift */; };
+		8460FF60274CB10500373830 /* TotalNotiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460FF5E274CB10500373830 /* TotalNotiVC.swift */; };
+		8460FF61274CB10500373830 /* TotalNotiVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8460FF5F274CB10500373830 /* TotalNotiVC.xib */; };
+		8460FF63274CB20900373830 /* TotalNotiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460FF62274CB20900373830 /* TotalNotiModel.swift */; };
+		8460FF66274CB2D400373830 /* TotalNotiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460FF64274CB2D400373830 /* TotalNotiCell.swift */; };
+		8460FF67274CB2D400373830 /* TotalNotiCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8460FF65274CB2D400373830 /* TotalNotiCell.xib */; };
 		84665E55272F643B00431B6C /* InfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84665E53272F643A00431B6C /* InfoWindow.swift */; };
 		84665E56272F643B00431B6C /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84665E54272F643B00431B6C /* InfoWindow.xib */; };
 		8471F7A1273181A400B39F10 /* LocationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471F7A0273181A400B39F10 /* LocationDetailVC.swift */; };
@@ -54,6 +62,10 @@
 		8487011E272B5CD00099D600 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8487011A272B5CD00099D600 /* SplashVC.swift */; };
 		8487011F272B5CD00099D600 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8487011B272B5CD00099D600 /* SignUpVC.swift */; };
 		84B55EDB272E8D870078CA86 /* Location&MarkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B55EDA272E8D870078CA86 /* Location&MarkModel.swift */; };
+		84CAF0DE274BC60700F1944E /* FavoriteLocationListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CAF0DC274BC60700F1944E /* FavoriteLocationListVC.swift */; };
+		84CAF0DF274BC60700F1944E /* FavoriteLocationListVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84CAF0DD274BC60700F1944E /* FavoriteLocationListVC.xib */; };
+		84CAF0E2274BD0D000F1944E /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CAF0E0274BD0D000F1944E /* LocationCell.swift */; };
+		84CAF0E3274BD0D000F1944E /* LocationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84CAF0E1274BD0D000F1944E /* LocationCell.xib */; };
 		84DAF4152731AD45003ABE46 /* NotiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DAF4142731AD45003ABE46 /* NotiVC.swift */; };
 		84DAF4172731ADCE003ABE46 /* NotiModel&Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DAF4162731ADCE003ABE46 /* NotiModel&Cell.swift */; };
 		84DAF4192731B79E003ABE46 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DAF4182731B79E003ABE46 /* FirebaseAPI.swift */; };
@@ -63,6 +75,9 @@
 /* Begin PBXFileReference section */
 		18CEE88EF9AA38BD44698A6C /* Pods-map-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-map-app.release.xcconfig"; path = "Target Support Files/Pods-map-app/Pods-map-app.release.xcconfig"; sourceTree = "<group>"; };
 		45BD952EBE79A59842309074 /* Pods-map-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-map-app.debug.xcconfig"; path = "Target Support Files/Pods-map-app/Pods-map-app.debug.xcconfig"; sourceTree = "<group>"; };
+		8415AAE8274C607E003FADCF /* UIColor+Extentsion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extentsion.swift"; sourceTree = "<group>"; };
+		8415AAEA274C7929003FADCF /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
+		8415AAEB274C7929003FADCF /* ProfileCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileCell.xib; sourceTree = "<group>"; };
 		84184EC727398B0F00CD65BD /* SearchDialogUV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDialogUV.swift; sourceTree = "<group>"; };
 		84184EC827398B0F00CD65BD /* SearchDialogUV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchDialogUV.xib; sourceTree = "<group>"; };
 		84184ECC27398D9700CD65BD /* AlwaysShowPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlwaysShowPopup.swift; sourceTree = "<group>"; };
@@ -72,6 +87,11 @@
 		84184ED027398D9700CD65BD /* SelectorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorTableViewController.swift; sourceTree = "<group>"; };
 		844983FC273B13730017495C /* NoteDialogUV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteDialogUV.xib; sourceTree = "<group>"; };
 		844983FD273B13730017495C /* NoteDialogUV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDialogUV.swift; sourceTree = "<group>"; };
+		8460FF5E274CB10500373830 /* TotalNotiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalNotiVC.swift; sourceTree = "<group>"; };
+		8460FF5F274CB10500373830 /* TotalNotiVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TotalNotiVC.xib; sourceTree = "<group>"; };
+		8460FF62274CB20900373830 /* TotalNotiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalNotiModel.swift; sourceTree = "<group>"; };
+		8460FF64274CB2D400373830 /* TotalNotiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalNotiCell.swift; sourceTree = "<group>"; };
+		8460FF65274CB2D400373830 /* TotalNotiCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TotalNotiCell.xib; sourceTree = "<group>"; };
 		84665E53272F643A00431B6C /* InfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
 		84665E54272F643B00431B6C /* InfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoWindow.xib; sourceTree = "<group>"; };
 		8471F7A0273181A400B39F10 /* LocationDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDetailVC.swift; sourceTree = "<group>"; };
@@ -112,6 +132,10 @@
 		8487011A272B5CD00099D600 /* SplashVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		8487011B272B5CD00099D600 /* SignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		84B55EDA272E8D870078CA86 /* Location&MarkModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location&MarkModel.swift"; sourceTree = "<group>"; };
+		84CAF0DC274BC60700F1944E /* FavoriteLocationListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteLocationListVC.swift; sourceTree = "<group>"; };
+		84CAF0DD274BC60700F1944E /* FavoriteLocationListVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteLocationListVC.xib; sourceTree = "<group>"; };
+		84CAF0E0274BD0D000F1944E /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		84CAF0E1274BD0D000F1944E /* LocationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationCell.xib; sourceTree = "<group>"; };
 		84DAF4142731AD45003ABE46 /* NotiVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiVC.swift; sourceTree = "<group>"; };
 		84DAF4162731ADCE003ABE46 /* NotiModel&Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotiModel&Cell.swift"; sourceTree = "<group>"; };
 		84DAF4182731B79E003ABE46 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
@@ -247,6 +271,7 @@
 				848700ED272B15800099D600 /* UIViewController+Extension.swift */,
 				8471F7A427319C8F00B39F10 /* CommonUtils.swift */,
 				847F4DDB273AB41B00992026 /* Date+Extension.swift */,
+				8415AAE8274C607E003FADCF /* UIColor+Extentsion.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -281,10 +306,17 @@
 			isa = PBXGroup;
 			children = (
 				84DAF4162731ADCE003ABE46 /* NotiModel&Cell.swift */,
+				8460FF62274CB20900373830 /* TotalNotiModel.swift */,
 				8471F7A22731861D00B39F10 /* PostModel&Cell.swift */,
 				84B55EDA272E8D870078CA86 /* Location&MarkModel.swift */,
 				848700FA272B1A940099D600 /* UserModel.swift */,
 				8487010E272B3FC30099D600 /* SettingCell.swift */,
+				84CAF0E0274BD0D000F1944E /* LocationCell.swift */,
+				84CAF0E1274BD0D000F1944E /* LocationCell.xib */,
+				8415AAEA274C7929003FADCF /* ProfileCell.swift */,
+				8415AAEB274C7929003FADCF /* ProfileCell.xib */,
+				8460FF64274CB2D400373830 /* TotalNotiCell.swift */,
+				8460FF65274CB2D400373830 /* TotalNotiCell.xib */,
 			);
 			path = "Model&Cell";
 			sourceTree = "<group>";
@@ -295,6 +327,8 @@
 				848700DE272B0A070099D600 /* MapVC.swift */,
 				84DAF4142731AD45003ABE46 /* NotiVC.swift */,
 				8471F7A0273181A400B39F10 /* LocationDetailVC.swift */,
+				8460FF5E274CB10500373830 /* TotalNotiVC.swift */,
+				8460FF5F274CB10500373830 /* TotalNotiVC.xib */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -304,6 +338,8 @@
 			children = (
 				848700FE272B29AE0099D600 /* MyaccountVC.swift */,
 				848700FD272B29AD0099D600 /* MyPageVC.swift */,
+				84CAF0DC274BC60700F1944E /* FavoriteLocationListVC.swift */,
+				84CAF0DD274BC60700F1944E /* FavoriteLocationListVC.xib */,
 				84870110272B41530099D600 /* SupportVC.swift */,
 			);
 			path = MyPage;
@@ -426,7 +462,12 @@
 				8487010B272B3E7C0099D600 /* SettingHeader.xib in Resources */,
 				844983FE273B13730017495C /* NoteDialogUV.xib in Resources */,
 				848700D6272B02FC0099D600 /* LaunchScreen.storyboard in Resources */,
+				84CAF0DF274BC60700F1944E /* FavoriteLocationListVC.xib in Resources */,
 				848700E9272B14870099D600 /* GoogleService-Info.plist in Resources */,
+				8460FF67274CB2D400373830 /* TotalNotiCell.xib in Resources */,
+				84CAF0E3274BD0D000F1944E /* LocationCell.xib in Resources */,
+				8460FF61274CB10500373830 /* TotalNotiVC.xib in Resources */,
+				8415AAED274C7929003FADCF /* ProfileCell.xib in Resources */,
 				84184ECA27398B0F00CD65BD /* SearchDialogUV.xib in Resources */,
 				848700D3272B02FC0099D600 /* Assets.xcassets in Resources */,
 				84665E56272F643B00431B6C /* InfoWindow.xib in Resources */,
@@ -507,23 +548,29 @@
 				848700E5272B0B870099D600 /* Constants.swift in Sources */,
 				8471F7A32731861E00B39F10 /* PostModel&Cell.swift in Sources */,
 				847F4DDC273AB41B00992026 /* Date+Extension.swift in Sources */,
+				84CAF0DE274BC60700F1944E /* FavoriteLocationListVC.swift in Sources */,
 				84665E55272F643B00431B6C /* InfoWindow.swift in Sources */,
 				84184ED327398D9700CD65BD /* MSDropDown.swift in Sources */,
 				848700CA272B02FA0099D600 /* AppDelegate.swift in Sources */,
 				8487011E272B5CD00099D600 /* SplashVC.swift in Sources */,
 				848700F6272B19890099D600 /* UIImage+Extension.swift in Sources */,
+				8460FF63274CB20900373830 /* TotalNotiModel.swift in Sources */,
 				84184ED527398D9700CD65BD /* SelectorTableViewController.swift in Sources */,
 				84DAF4192731B79E003ABE46 /* FirebaseAPI.swift in Sources */,
+				8460FF66274CB2D400373830 /* TotalNotiCell.swift in Sources */,
 				8487010D272B3EEA0099D600 /* UITextField+Extension.swift in Sources */,
 				8487010A272B3E7C0099D600 /* SettingHeader.swift in Sources */,
 				84870100272B29AE0099D600 /* MyaccountVC.swift in Sources */,
 				84184ED227398D9700CD65BD /* KeyValueModel.swift in Sources */,
+				84CAF0E2274BD0D000F1944E /* LocationCell.swift in Sources */,
 				8487011C272B5CD00099D600 /* ForgotVC.swift in Sources */,
 				84870113272B42770099D600 /* String+Extention.swift in Sources */,
 				848700FF272B29AE0099D600 /* MyPageVC.swift in Sources */,
 				84184ED127398D9700CD65BD /* AlwaysShowPopup.swift in Sources */,
 				84DAF4172731ADCE003ABE46 /* NotiModel&Cell.swift in Sources */,
 				848700DF272B0A080099D600 /* MapVC.swift in Sources */,
+				8415AAEC274C7929003FADCF /* ProfileCell.swift in Sources */,
+				8460FF60274CB10500373830 /* TotalNotiVC.swift in Sources */,
 				84870106272B3DE70099D600 /* UIView+Extension.swift in Sources */,
 				84870116272B438B0099D600 /* ApiManager.swift in Sources */,
 				84184EC927398B0F00CD65BD /* SearchDialogUV.swift in Sources */,
@@ -536,6 +583,7 @@
 				848700F3272B15F50099D600 /* KAWebBrowser.swift in Sources */,
 				84870111272B41530099D600 /* SupportVC.swift in Sources */,
 				84DAF4152731AD45003ABE46 /* NotiVC.swift in Sources */,
+				8415AAE9274C607E003FADCF /* UIColor+Extentsion.swift in Sources */,
 				8471F7A1273181A400B39F10 /* LocationDetailVC.swift in Sources */,
 				8471F7A527319C8F00B39F10 /* CommonUtils.swift in Sources */,
 				848700CC272B02FA0099D600 /* SceneDelegate.swift in Sources */,
@@ -692,7 +740,7 @@
 				CODE_SIGN_ENTITLEMENTS = "map-app/map-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = SMBP246BXH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "map-app/Info.plist";
@@ -706,6 +754,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保カツMAPアプリケーションは、プロフィール写真を管理するためにフォトライブラリにアクセスしようとしています。";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
@@ -734,7 +783,7 @@
 				CODE_SIGN_ENTITLEMENTS = "map-app/map-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = SMBP246BXH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "map-app/Info.plist";
@@ -748,6 +797,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保カツMAPアプリケーションは、プロフィール写真を管理するためにフォトライブラリにアクセスしようとしています。";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
