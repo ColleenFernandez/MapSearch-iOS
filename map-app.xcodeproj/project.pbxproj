@@ -61,9 +61,10 @@
 		8487011D272B5CD00099D600 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84870119272B5CD00099D600 /* LoginVC.swift */; };
 		8487011E272B5CD00099D600 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8487011A272B5CD00099D600 /* SplashVC.swift */; };
 		8487011F272B5CD00099D600 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8487011B272B5CD00099D600 /* SignUpVC.swift */; };
+		8496A856274F6C0500C632F0 /* TotalNotiDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8496A854274F6C0500C632F0 /* TotalNotiDetailVC.swift */; };
+		8496A859274F6EB100C632F0 /* TotalNotiDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8496A858274F6EB100C632F0 /* TotalNotiDetailCell.swift */; };
 		84B55EDB272E8D870078CA86 /* Location&MarkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B55EDA272E8D870078CA86 /* Location&MarkModel.swift */; };
 		84CAF0DE274BC60700F1944E /* FavoriteLocationListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CAF0DC274BC60700F1944E /* FavoriteLocationListVC.swift */; };
-		84CAF0DF274BC60700F1944E /* FavoriteLocationListVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84CAF0DD274BC60700F1944E /* FavoriteLocationListVC.xib */; };
 		84CAF0E2274BD0D000F1944E /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CAF0E0274BD0D000F1944E /* LocationCell.swift */; };
 		84CAF0E3274BD0D000F1944E /* LocationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84CAF0E1274BD0D000F1944E /* LocationCell.xib */; };
 		84DAF4152731AD45003ABE46 /* NotiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DAF4142731AD45003ABE46 /* NotiVC.swift */; };
@@ -131,9 +132,10 @@
 		84870119272B5CD00099D600 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		8487011A272B5CD00099D600 /* SplashVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		8487011B272B5CD00099D600 /* SignUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
+		8496A854274F6C0500C632F0 /* TotalNotiDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalNotiDetailVC.swift; sourceTree = "<group>"; };
+		8496A858274F6EB100C632F0 /* TotalNotiDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TotalNotiDetailCell.swift; sourceTree = "<group>"; };
 		84B55EDA272E8D870078CA86 /* Location&MarkModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location&MarkModel.swift"; sourceTree = "<group>"; };
 		84CAF0DC274BC60700F1944E /* FavoriteLocationListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteLocationListVC.swift; sourceTree = "<group>"; };
-		84CAF0DD274BC60700F1944E /* FavoriteLocationListVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteLocationListVC.xib; sourceTree = "<group>"; };
 		84CAF0E0274BD0D000F1944E /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		84CAF0E1274BD0D000F1944E /* LocationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationCell.xib; sourceTree = "<group>"; };
 		84DAF4142731AD45003ABE46 /* NotiVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiVC.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				84870101272B29B20099D600 /* Map */,
+				8496A851274F671F00C632F0 /* Favorite */,
 				84870102272B29BD0099D600 /* MyPage */,
 			);
 			path = TabBar;
@@ -305,6 +308,7 @@
 		848700F9272B1A790099D600 /* Model&Cell */ = {
 			isa = PBXGroup;
 			children = (
+				8496A858274F6EB100C632F0 /* TotalNotiDetailCell.swift */,
 				84DAF4162731ADCE003ABE46 /* NotiModel&Cell.swift */,
 				8460FF62274CB20900373830 /* TotalNotiModel.swift */,
 				8471F7A22731861D00B39F10 /* PostModel&Cell.swift */,
@@ -329,6 +333,7 @@
 				8471F7A0273181A400B39F10 /* LocationDetailVC.swift */,
 				8460FF5E274CB10500373830 /* TotalNotiVC.swift */,
 				8460FF5F274CB10500373830 /* TotalNotiVC.xib */,
+				8496A854274F6C0500C632F0 /* TotalNotiDetailVC.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -338,8 +343,6 @@
 			children = (
 				848700FE272B29AE0099D600 /* MyaccountVC.swift */,
 				848700FD272B29AD0099D600 /* MyPageVC.swift */,
-				84CAF0DC274BC60700F1944E /* FavoriteLocationListVC.swift */,
-				84CAF0DD274BC60700F1944E /* FavoriteLocationListVC.xib */,
 				84870110272B41530099D600 /* SupportVC.swift */,
 			);
 			path = MyPage;
@@ -378,6 +381,14 @@
 				8487011A272B5CD00099D600 /* SplashVC.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		8496A851274F671F00C632F0 /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				84CAF0DC274BC60700F1944E /* FavoriteLocationListVC.swift */,
+			);
+			path = Favorite;
 			sourceTree = "<group>";
 		};
 		84DAF40E2731AC5B003ABE46 /* BadgedBarButtonItem */ = {
@@ -462,7 +473,6 @@
 				8487010B272B3E7C0099D600 /* SettingHeader.xib in Resources */,
 				844983FE273B13730017495C /* NoteDialogUV.xib in Resources */,
 				848700D6272B02FC0099D600 /* LaunchScreen.storyboard in Resources */,
-				84CAF0DF274BC60700F1944E /* FavoriteLocationListVC.xib in Resources */,
 				848700E9272B14870099D600 /* GoogleService-Info.plist in Resources */,
 				8460FF67274CB2D400373830 /* TotalNotiCell.xib in Resources */,
 				84CAF0E3274BD0D000F1944E /* LocationCell.xib in Resources */,
@@ -554,6 +564,7 @@
 				848700CA272B02FA0099D600 /* AppDelegate.swift in Sources */,
 				8487011E272B5CD00099D600 /* SplashVC.swift in Sources */,
 				848700F6272B19890099D600 /* UIImage+Extension.swift in Sources */,
+				8496A856274F6C0500C632F0 /* TotalNotiDetailVC.swift in Sources */,
 				8460FF63274CB20900373830 /* TotalNotiModel.swift in Sources */,
 				84184ED527398D9700CD65BD /* SelectorTableViewController.swift in Sources */,
 				84DAF4192731B79E003ABE46 /* FirebaseAPI.swift in Sources */,
@@ -572,6 +583,7 @@
 				8415AAEC274C7929003FADCF /* ProfileCell.swift in Sources */,
 				8460FF60274CB10500373830 /* TotalNotiVC.swift in Sources */,
 				84870106272B3DE70099D600 /* UIView+Extension.swift in Sources */,
+				8496A859274F6EB100C632F0 /* TotalNotiDetailCell.swift in Sources */,
 				84870116272B438B0099D600 /* ApiManager.swift in Sources */,
 				84184EC927398B0F00CD65BD /* SearchDialogUV.swift in Sources */,
 				8487011F272B5CD00099D600 /* SignUpVC.swift in Sources */,
@@ -740,7 +752,7 @@
 				CODE_SIGN_ENTITLEMENTS = "map-app/map-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = SMBP246BXH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "map-app/Info.plist";
@@ -783,7 +795,7 @@
 				CODE_SIGN_ENTITLEMENTS = "map-app/map-app.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = SMBP246BXH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "map-app/Info.plist";

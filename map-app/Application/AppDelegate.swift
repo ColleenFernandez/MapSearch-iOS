@@ -157,8 +157,36 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 }
                             }
                         }
-                    }else{
-                        SwiftMessages.hide()
+                    }else if let total_noti_hash = userInfo["total_noti_info"] as? AnyHashable{
+                        let json = JSON(total_noti_hash)
+                        if let data = json.rawString()!.data(using: .utf8) {
+                            if let json = try? JSON(data: data) {
+                                
+                                if let json_arr = json["total_noti_info"].arrayObject{
+                                    var total_noti = [TotalNotiModel]()
+                                    total_noti.removeAll()
+                                    
+                                    if json_arr.count > 0 {
+                                        var num = 0
+                                        for one in json_arr {
+                                            num += 1
+                                            total_noti.append(TotalNotiModel(JSON(one)))
+                                            if num == json_arr.count{
+                                                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                                                let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC") as! SplashVC
+                                                initialViewController.from_noti = true
+                                                initialViewController.total_noti = total_noti
+                                                let navigationcontroller = UINavigationController.init(rootViewController: initialViewController)
+                                                
+                                                SceneDelegate.shared?.window?.rootViewController = navigationcontroller
+                                                SceneDelegate.shared?.window!.makeKeyAndVisible()
+                                                SwiftMessages.hide()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 })
                 view.configureTheme(backgroundColor: .blue, foregroundColor: UIColor.white, iconImage: icon, iconText: nil)
@@ -202,6 +230,36 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                         SceneDelegate.shared?.window?.rootViewController = navigationcontroller
                         SceneDelegate.shared?.window!.makeKeyAndVisible()
                         SwiftMessages.hide()
+                    }
+                }
+            }
+        }else if let total_noti_hash = userInfo["total_noti_info"] as? AnyHashable{
+            let json = JSON(total_noti_hash)
+            if let data = json.rawString()!.data(using: .utf8) {
+                if let json = try? JSON(data: data) {
+                    
+                    if let json_arr = json["total_noti_info"].arrayObject{
+                        var total_noti = [TotalNotiModel]()
+                        total_noti.removeAll()
+                        
+                        if json_arr.count > 0 {
+                            var num = 0
+                            for one in json_arr {
+                                num += 1
+                                total_noti.append(TotalNotiModel(JSON(one)))
+                                if num == json_arr.count{
+                                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                                    let initialViewController = storyBoard.instantiateViewController(withIdentifier: "SplashVC") as! SplashVC
+                                    initialViewController.from_noti = true
+                                    initialViewController.total_noti = total_noti
+                                    let navigationcontroller = UINavigationController.init(rootViewController: initialViewController)
+                                    
+                                    SceneDelegate.shared?.window?.rootViewController = navigationcontroller
+                                    SceneDelegate.shared?.window!.makeKeyAndVisible()
+                                    SwiftMessages.hide()
+                                }
+                            }
+                        }
                     }
                 }
             }

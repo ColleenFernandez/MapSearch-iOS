@@ -254,8 +254,7 @@ struct COLORS {
 
 struct SettingOptions {
     static let setting_section = [Messages.ACCOUNT, Messages.ETC]
-    static let settingOption_section0 = [Messages.FAVORITE_LOCATION_LIST]
-    static let settingOption_section1 = [Messages.LOGIN, Messages.FAVORITE_LOCATION_LIST]
+    static let settingOption_section1 = [Messages.LOGIN]
     static let settingOption_section2 = [Messages.TERMS, Messages.PRIVACY_KAN, Messages.CONTACT_US, Messages.LOGOUT]
     static let settingOption_section3 = [Messages.TERMS, Messages.PRIVACY_KAN, Messages.CONTACT_US]
 }

@@ -21,6 +21,7 @@ class PostModel {
     var post_title: String?
     var media_ratio: Float
     var notes: String?
+    var refer_url: String?
     
     init() {
         self.post_id = 0
@@ -30,6 +31,7 @@ class PostModel {
         self.post_des = nil
         self.post_title = nil
         self.notes = nil
+        self.refer_url = nil
         self.media_ratio = 1
     }
     
@@ -40,6 +42,7 @@ class PostModel {
         self.post_content = one[PARAMS.POST_CONTENT].stringValue
         self.post_title = one["post_title"].stringValue
         self.post_des = one[PARAMS.POST_DES].stringValue
+        self.refer_url = one["refer_url"].stringValue
         self.media_ratio = one[PARAMS.MEDIA_RATIO].floatValue
         let notes_object = one["comment"].object
         self.notes = JSON(notes_object as Any)["comment_content"].stringValue
@@ -53,8 +56,11 @@ class PostCell: UITableViewCell{
     @IBOutlet weak var lbl_post_title: UILabel!
     @IBOutlet weak var indc_imv_post: UIActivityIndicatorView!
     @IBOutlet weak var lbl_post_time: UILabel!
+    @IBOutlet weak var lbl_refer_url: UILabel!
     
     var noteAction: (() -> ())?
+    var referUrlAction: (() -> ())?
+    
     func setDataSource(_ one: PostModel!) {
         lbl_post_title.text = one.post_title
         imv_post.kf.indicatorType = .activity
@@ -71,6 +77,12 @@ class PostCell: UITableViewCell{
                 }
             }
         }*/
+        lbl_refer_url.text = one.refer_url
+        lbl_refer_url.addTapGesture(tapNumber: 1, target: self, action: #selector(onClickUrl))
+    }
+    
+    @objc func onClickUrl(gesture: UITapGestureRecognizer) -> Void {
+        self.referUrlAction?()
     }
     
     @IBAction func noteBtnClicked(_ sender: Any) {

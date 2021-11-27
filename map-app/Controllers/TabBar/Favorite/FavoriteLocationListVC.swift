@@ -49,9 +49,12 @@ class FavoriteLocationListVC: BaseVC {
                             }
                         }
                     }else{
+                        self.showToast("お気に入りの場所はまだありません")
                         self.tbl_locations.reloadData()
                     }
                 }
+            }else{
+                self.tbl_locations.reloadData()
             }
         }
     }
@@ -59,8 +62,11 @@ class FavoriteLocationListVC: BaseVC {
     func setUI() {
         showNavBar()
         self.navigationItem.title = Messages.FAVORITE_LOCATION_LIST
-        setDataSource()
-        addBackButton()
+        if thisuser.isValid{
+            setDataSource()
+        }else{
+            self.requireLogin()
+        }
     }
 }
 
@@ -80,9 +86,13 @@ extension FavoriteLocationListVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tbl_locations.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath) as! LocationCell
-        cell.setDataSource(one: ds_favorite_locatoin[indexPath.section])
-        return cell
+        if self.ds_favorite_locatoin.count > indexPath.section{
+            let cell = tbl_locations.dequeueReusableCell(withIdentifier: "LocationCell", for: indexPath) as! LocationCell
+            cell.setDataSource(one: ds_favorite_locatoin[indexPath.section])
+            return cell
+        }else{
+            return UITableViewCell()
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

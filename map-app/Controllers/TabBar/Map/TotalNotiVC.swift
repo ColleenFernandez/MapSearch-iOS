@@ -70,7 +70,10 @@ extension TotalNotiVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let tovc = self.createVC("TotalNotiDetailVC") as! TotalNotiDetailVC
+        tovc.ds_total_noti = self.ds_total_noti
+        tovc.selected_section = indexPath.section
+        self.navigationController?.pushViewController(tovc, animated: true)
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

@@ -560,10 +560,10 @@ class MapVC: BaseVC {
     }
     
     public func presentAlert(from sourceView: UIView, location: LocationModel) {
+        self.selected_location = location
         let alertController = UIAlertController(title: "開始位置を選択してください", message: nil, preferredStyle: .actionSheet)
         
         if let action = self.action(title: "選択したマーカーから開始", location: location) {
-            self.selected_location = location
             alertController.addAction(action)
         }
         
@@ -579,10 +579,19 @@ class MapVC: BaseVC {
         return UIAlertAction(title: title, style: .default) {  _ in
             if title == "選択したマーカーから開始"{
                 self.is_started_markerlocation_measure = true
+                self.showToastCenter("地図から目的地をお選びください")
             }else if title == "現在の私の場所から開始"{
                 self.is_started_mylocation_measure = true
+                if self.is_started_mylocation_measure {
+                    if let mylocation = self.mylocation{
+                        self.drawPolyline(from: location, destination: mylocation)
+                        self.is_started_mylocation_measure = false
+                    }else{
+                        self.showAlertMessage(title: nil, msg: "現在地へのアクセスを許可しませんでした。システム設定で位置情報へのアクセスを許可してください。")
+                        self.is_started_mylocation_measure = false
+                    }
+                }
             }
-            self.showToastCenter("地図から目的地をお選びください")
         }
     }
 }
@@ -701,12 +710,6 @@ extension MapVC: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if is_started_markerlocation_measure, let location = selected_location {
             drawPolyline(from: location, destination: coordinate)
-        }else if is_started_mylocation_measure {
-            if let mylocation = self.mylocation{
-                drawPolyline(from: LocationModel(mylocation), destination: coordinate)
-            }else{
-                self.showAlertMessage(title: nil, msg: "現在地へのアクセスを許可しませんでした。システム設定で位置情報へのアクセスを許可してください。")
-            }
         }
     }
     

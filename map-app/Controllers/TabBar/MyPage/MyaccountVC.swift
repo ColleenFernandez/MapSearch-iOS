@@ -53,7 +53,6 @@ class MyaccountVC: BaseVC {
         super.viewDidLoad()
         
         editInit()
-        uiv_camera.addTapGesture(tapNumber: 1, target: self, action: #selector(onEdtPhoto))
         self.imagePicker = ImagePicker(presentationController: self, delegate: self, is_cropping: true)
     }
     
@@ -74,7 +73,7 @@ class MyaccountVC: BaseVC {
         
     }
     
-    @objc func onEdtPhoto(gesture: UITapGestureRecognizer) -> Void {
+    @IBAction func gotoCamera(_ sender: Any) {
         self.imagePicker.present(from: view)
     }
     

@@ -27,6 +27,7 @@ class LocationModel {
     var is_location_like: Bool = false
     var post: [PostModel]?
     var has_new_noti: Bool = false
+    var location_homepage: String?
     
     init() {
         self.location_id = -1
@@ -41,6 +42,7 @@ class LocationModel {
         self.post = nil
         self.has_new_noti = false
         self.location_memo = nil
+        self.location_homepage = nil
     }
     
     init(_ one: JSON){
@@ -64,6 +66,7 @@ class LocationModel {
             }
         }
         self.has_new_noti = Int64(NSDate().timeIntervalSince1970) - one[PARAMS.LAST_UPDATED].int64Value <= Constants.ONE_WEEK_TIMESTAMP ? true : false
+        self.location_homepage = one["location_homepage"].stringValue
     }
     
     init(_ one: CLLocationCoordinate2D){

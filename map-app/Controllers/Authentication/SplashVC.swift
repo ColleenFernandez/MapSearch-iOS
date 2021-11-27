@@ -15,7 +15,10 @@ import _SwiftUIKitOverlayShims
 class SplashVC: BaseVC {
 
     var from_noti: Bool = false
+    
     var location: LocationModel?
+    var total_noti: [TotalNotiModel]?
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNavigationTopColor()
@@ -39,12 +42,21 @@ class SplashVC: BaseVC {
     }
 
     func checkBackgrouond(){
-        if thisuser.isValid,self.from_noti, let location = self.location{
-            let tovc = self.createVC("LocationDetailVC") as! LocationDetailVC
-            tovc.location = location
-            tovc.from_noti = true
-            self.showNavBar()
-            self.navigationController?.pushViewController(tovc, animated: true)
+        if thisuser.isValid && self.from_noti{
+            if let location = self.location{
+                let tovc = self.createVC("LocationDetailVC") as! LocationDetailVC
+                tovc.location = location
+                tovc.from_noti = true
+                self.showNavBar()
+                self.navigationController?.pushViewController(tovc, animated: true)
+            
+            }else if let total_noti = total_noti {
+                let tovc = self.createVC("TotalNotiDetailVC") as! TotalNotiDetailVC
+                tovc.ds_total_noti = total_noti
+                tovc.from_noti = true
+                self.showNavBar()
+                self.navigationController?.pushViewController(tovc, animated: true)
+            }
         }else{
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
                 if thisuser.isValid{

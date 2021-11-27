@@ -15,8 +15,7 @@ class LocationDetailVC: BaseVC {
     @IBOutlet var imv_location_image: UIImageView!
     @IBOutlet var lbl_location_name: UILabel!
     @IBOutlet var lbl_location_address: UILabel!
-    @IBOutlet var lbl_location_lat: UILabel!
-    @IBOutlet var lbl_location_lang: UILabel!
+    @IBOutlet var lbl_location_homepage: UILabel!
     @IBOutlet var lbl_location_detail: UILabel!
     @IBOutlet weak var lbl_location_memo: UILabel!
     @IBOutlet var scr_container: UIScrollView!
@@ -78,9 +77,10 @@ class LocationDetailVC: BaseVC {
             
             lbl_location_name.text = one.location_name
             lbl_location_address.text = one.location_address
-            lbl_location_lat.text = "\(one.location_lat ?? 0)"
-            lbl_location_lang.text = "\(one.location_lang ?? 0)"
             lbl_location_detail.text = one.location_description
+            lbl_location_homepage.text = one.location_homepage
+           
+            lbl_location_homepage.addTapGesture(tapNumber: 1, target: self, action: #selector(onClickHomePageURL))
             lbl_location_memo.text = one.location_memo
             btn_favorite.setImage(one.is_location_like ? UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.red) : UIImage(systemName: "heart")?.withRenderingMode(.alwaysTemplate).withTintColor(.white), for: .normal)
             btn_favorite.tintColor = one.is_location_like ? .red : .white
@@ -104,6 +104,14 @@ class LocationDetailVC: BaseVC {
                 }
             } else {
                 //cons_tbl_post.constant = 0
+            }
+        }
+    }
+    
+    @objc func onClickHomePageURL(gesture: UITapGestureRecognizer) -> Void {
+        if let one = location {
+            if let str = one.location_homepage, !str.isEmpty{
+                self.showWebViewWithProgressBar(str, title: one.location_name ?? "ホームページ")
             }
         }
     }
@@ -171,8 +179,10 @@ extension LocationDetailVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tbl_home.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
         cell.setDataSource(ds_post[indexPath.section])
-        cell.noteAction = {() in
-            
+        cell.referUrlAction = {() in
+            if let str = self.ds_post[indexPath.section].refer_url, !str.isEmpty{
+                self.showWebViewWithProgressBar(str, title: self.ds_post[indexPath.section].post_title ?? "参照URL")
+            }
         }
         return cell
     }

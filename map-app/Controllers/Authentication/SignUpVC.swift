@@ -49,7 +49,6 @@ class SignUpVC: BaseVC {
         super.viewDidLoad()
         
         editInit()
-        uiv_camera.addTapGesture(tapNumber: 1, target: self, action: #selector(onEdtPhoto))
         self.imagePicker = ImagePicker(presentationController: self, delegate: self, is_cropping: true)
     }
     
@@ -61,7 +60,7 @@ class SignUpVC: BaseVC {
         
     }
     
-    @objc func onEdtPhoto(gesture: UITapGestureRecognizer) -> Void {
+    @IBAction func gotoCamera(_ sender: Any) {
         self.imagePicker.present(from: view)
     }
     
@@ -78,6 +77,11 @@ class SignUpVC: BaseVC {
         self.presentWebViewWithProgressBar(Constants.TERMS_LINK)
         //self.showWebViewWithProgressBar(Constants.TERMS_LINK)
     }
+    
+    @IBAction func closeBtnClicked(_ sender: Any) {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
     
     @IBAction func gotoPrivacy(_ sender: Any) {
         //showNavBar()

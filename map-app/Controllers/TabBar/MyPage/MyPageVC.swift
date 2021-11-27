@@ -32,15 +32,9 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             if thisuser.isValid{
-                if indexPath.row == 0{
-                    let cell = tbl_setting.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileCell
-                    cell.setProfile()
-                    return cell
-                }else{
-                    let cell = tbl_setting.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath) as! SettingCell
-                    cell.entity = SettingOptions.settingOption_section0[0]
-                    return cell
-                }
+                let cell = tbl_setting.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileCell
+                cell.setProfile()
+                return cell
             }else{
                 let cell = tbl_setting.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath) as! SettingCell
                 cell.entity = SettingOptions.settingOption_section1[indexPath.row]
@@ -50,6 +44,11 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
             let cell = tbl_setting.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath) as! SettingCell
             if thisuser.isValid{
                 cell.entity = SettingOptions.settingOption_section2[indexPath.row]
+                if indexPath.row == SettingOptions.settingOption_section2.count - 1{
+                    cell.setting_lbl.textColor = .red
+                }else{
+                    cell.setting_lbl.textColor = .black
+                }
             }else{
                 cell.entity = SettingOptions.settingOption_section3[indexPath.row]
             }
@@ -59,7 +58,7 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 2
+            return 1
         } else {
             if thisuser.isValid{
                 return SettingOptions.settingOption_section2.count
@@ -91,12 +90,8 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0{
-            if indexPath.row == 0{
-                if thisuser.isValid{
-                    return UITableView.automaticDimension
-                }else{
-                    return 48
-                }
+            if thisuser.isValid{
+                return UITableView.automaticDimension
             }else{
                 return 48
             }
@@ -117,11 +112,7 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
                     self.gotoVC("LoginNav")
                 }
             case 1:
-                if thisuser.isValid{
-                    self.navigationController?.pushViewController(FavoriteLocationListVC(), animated: true)
-                }else{
-                    self.requireLogin()
-                }
+                print("default")
             default:
                 print("default")
             }
