@@ -370,4 +370,24 @@ class ApiManager {
             }
         }
     }
+    
+    class func logout( completion: @escaping (_ success: Bool, _ response: Any?) -> Void) {
+        let params = ["user_id": thisuser.user_id] as [String: Any]
+        Alamofire.request(SERVER_URL + "logout", method: .post, parameters: params)
+        .responseJSON { response in
+            switch response.result {
+            case .failure:
+                completion(false, nil)
+            case let .success(data):
+                let dict = JSON(data)
+                let status = dict[PARAMS.RESULTCODE].intValue // 0,1,2
+                if status == SUCCESSTRUE {
+                    completion(true, status)
+                } else {
+                    completion(false, status)
+                }
+            }
+        }
+    }
+    
 }

@@ -130,8 +130,18 @@ extension MyPageVC: UITableViewDataSource, UITableViewDelegate {
                 if thisuser.isValid{
                     let alertController = UIAlertController(title: "注意", message: "ログアウトしてもよろしいですか？", preferredStyle: .alert)
                     let OKAction = UIAlertAction(title: "はい", style: .default) { (_: UIAlertAction!) in
-                        thisuser.clearUserInfo()
-                        self.gotoTabControllerWithIndex(0)
+                        self.showLoadingView(vc: self)
+                        ApiManager.logout { success, response in
+                            self.hideLoadingView()
+                            if success{
+                                thisuser.clearUserInfo()
+                                self.gotoTabControllerWithIndex(0)
+                            }else{
+                                self.showToast(Messages.NETISSUE)
+                                thisuser.clearUserInfo()
+                                self.gotoTabControllerWithIndex(0)
+                            }
+                        }
                     }
                     let cancelAction = UIAlertAction(title: "いいえ", style: .default) { (_: UIAlertAction!) in
                     }

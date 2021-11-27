@@ -49,30 +49,42 @@ class SplashVC: BaseVC {
                 tovc.from_noti = true
                 self.showNavBar()
                 self.navigationController?.pushViewController(tovc, animated: true)
-            
-            }else if let total_noti = total_noti {
-                let tovc = self.createVC("TotalNotiDetailVC") as! TotalNotiDetailVC
-                tovc.ds_total_noti = total_noti
-                tovc.from_noti = true
-                self.showNavBar()
-                self.navigationController?.pushViewController(tovc, animated: true)
+            }
+            if self.from_noti{
+                if let total_noti = total_noti {
+                    let tovc = self.createVC("TotalNotiDetailVC") as! TotalNotiDetailVC
+                    tovc.ds_total_noti = total_noti
+                    tovc.from_noti = true
+                    self.showNavBar()
+                    self.navigationController?.pushViewController(tovc, animated: true)
+                }
             }
         }else{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-                if thisuser.isValid{
-                    self.showLoadingView(vc: self)
-                    ApiManager.signin(email: thisuser.user_email ?? "", password: thisuser.password ?? "") { success, response in
-                        self.hideLoadingView()
-                        self.gotoVC("TabBarVC")
-                    }
-                }else{
-                    self.showLoadingView(vc: self)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        self.hideLoadingView()
-                        self.gotoVC("TabBarVC")
-                    }
+            if self.from_noti{
+                if let total_noti = total_noti {
+                    let tovc = self.createVC("TotalNotiDetailVC") as! TotalNotiDetailVC
+                    tovc.ds_total_noti = total_noti
+                    tovc.from_noti = true
+                    self.showNavBar()
+                    self.navigationController?.pushViewController(tovc, animated: true)
                 }
-            })
+            }else{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                    if thisuser.isValid{
+                        self.showLoadingView(vc: self)
+                        ApiManager.signin(email: thisuser.user_email ?? "", password: thisuser.password ?? "") { success, response in
+                            self.hideLoadingView()
+                            self.gotoVC("TabBarVC")
+                        }
+                    }else{
+                        self.showLoadingView(vc: self)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.hideLoadingView()
+                            self.gotoVC("TabBarVC")
+                        }
+                    }
+                })
+            }
         }
     }
 }
